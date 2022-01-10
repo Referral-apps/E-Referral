@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 
 const Layout = ({children}) => {
     return ( 
-        <section className="dashboard">
+        <section className="dashboard padding-bottom-50">
             <Navbar />
             <div className="">   
             {children}

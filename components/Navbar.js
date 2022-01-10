@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { useState } from "react"
+import Infonav from "./Infonav"
 
 const Navbar = () => {
     const [sidewidth, setsidewidth] = useState('0px')
@@ -10,23 +11,24 @@ const Navbar = () => {
       }
     return (
         <section>
-    <section className='sticky-top width-100-p'>
-     <div class="navigation-bar hr">
+    <section className='fixed-top width-100-p'>
+
+     <div className="navigation-bar white hr">
      
     <div className="padding">
-        <span class="material-icons icon size-2 pointer" onClick={()=>setsidewidth("250px")}>
+        <span className="material-icons icon size-2 pointer" onClick={()=>setsidewidth("250px")}>
             menu
         </span>
     </div>  
 
     <div>
-    <span class="logo padding">E-Referral</span> 
+    <span className="logo padding">E-Referral</span> 
     </div>
 
         <div className="row-flex">
      {/* <Link href='/'>
-         <a>
-         <span class="material-icons text-indigo icon size-2">
+         <a className="text-white hover-text-blue">
+         <span className="material-icons text-indigo icon size-2">
             home
         </span>
          </a>
@@ -40,8 +42,8 @@ const Navbar = () => {
 </div>
     </section>
     <div className="sidebar" style={{width:`${sidewidth}`}}>
-    <div class="text-right padding">
-         <span class="text-xx-large text-white pointer" onClick={()=>setsidewidth("0px")}>
+    <div className="text-right padding">
+         <span className="text-xx-large text-white pointer" onClick={()=>setsidewidth("0px")}>
              &times;
          </span>
      </div>
@@ -50,73 +52,77 @@ const Navbar = () => {
            </div>
 
            <div className="padding">
-           <div className='text-larger text-center'>
+           <div className='text-larger text-center padding'>
             <Link href='/'>
-                <a>
-                Home
+                <a className="text-white hover-text-blue">
+                <div className="logo text-white">E-Referral</div>
                 </a>
             </Link>
           </div>
-          <div className="hr section"></div>
-          <div class="section pointer back-shadow hover-up">
-
-         </div>
-
-
-<div class="padding">
-<div className="logo">E-Referral</div>
-</div>
 
 <div className="hr"></div>
-<div class="section pointer text-left">
+<div className="section pointer text-left">
   <Link href='/dashboard'>
-      <a>
-      <span class="hover-text-blue"> Dashboard</span>
+      <a className="text-white hover-text-blue">
+      <span className="hover-text-blue"> Dashboard</span>
       </a>
   </Link>  
 </div>
 <div className="hr"></div>
-<div class="section pointer text-left">
+<div className="section pointer text-left">
   <Link href='/referpatient'>
-      <a>
-      <span class="hover-text-blue"> Refer Patient</span>
+      <a className="text-white hover-text-blue">
+      <span className="hover-text-blue"> Refer Patient</span>
       </a>
   </Link>  
 </div>
 
 <div className="hr"></div>
-<div class="section pointer text-left">
+<div className="section pointer text-left">
  <Link href='/refferedstatus'>
-     <a>
-     <span class="hover-text-blue"> View Referred Patient Status</span> 
+     <a className="text-white hover-text-blue">
+     <span className="hover-text-blue"> View Referred Patient Status</span> 
      </a>
  </Link>
 </div>
 <div className="hr"></div>
-<div class="section pointer text-left">
+<div className="section pointer text-left">
   <Link href='/viewreferrals'>
-      <a>
-      <span class="hover-text-blue">View Refferals</span>
+      <a className="text-white hover-text-blue">
+      <span className="hover-text-blue">View Refferals</span>
       </a>
   </Link>  
 </div>
 <div className="hr"></div>
-<div class="section pointer text-left">
-    <span class="hover-text-blue"> View Referred Partient Statistics</span>
+<div className="section pointer text-left">
+  <Link href='/statistics/regional'>
+      <a className="text-white hover-text-blue">
+      <span className="hover-text-blue">Regional Statistics</span>
+      </a>
+  </Link>  
 </div>
 <div className="hr"></div>
-<div class="section pointer text-left">
+<div className="section pointer text-left">
+  <Link href='/statistics/district'>
+      <a className="text-white hover-text-blue">
+      <span className="hover-text-blue">District Statistics</span>
+      </a>
+  </Link>  
+</div>
+
+<div className="hr"></div>
+<div className="section pointer text-left">
  <Link href='/refferalrequest'>
-     <a>
-     <span class="hover-text-blue"> Accept | Forward Referral</span>
+     <a className="text-white hover-text-blue">
+     <span className="hover-text-blue"> Accept | Forward Referral</span>
      </a>
  </Link>
 </div>
 <div className="hr"></div>
-<div class="section pointer text-left">
- <Link href='/adminisdivativeroles'>
-     <a>
-     <span class="hover-text-blue">  Adminisdivative Roles (Based On Levels)</span>
+<div className="section pointer text-left">
+ <Link href='/administration'>
+     <a className="text-white hover-text-blue">
+     <span className="hover-text-blue">  Adminisdivative Roles (Based On Levels)</span>
      </a>
  </Link>
 </div>

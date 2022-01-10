@@ -4,66 +4,84 @@ import {BarChart,Bar,XAxis,YAxis,CartesianGrid,Tooltip,Legend} from "recharts";
 const Chart = () => {
     const data = [
         {
-          name: "Page A",
-          uv: 4000,
-          pv: 2400,
-          amt: 2400
+          name: "Wa municipal",
+          referredin: 4000,
+          referredout: 2400,
+          feedback: 2400
         },
         {
-          name: "Page B",
-          uv: 3000,
-          pv: 1398,
-          amt: 2210
+          name: "Nadowli/Kaleo",
+          referredin: 4500,
+          referredout: 2800,
+          feedback: 3400
         },
         {
-          name: "Page C",
-          uv: 2000,
-          pv: 9800,
-          amt: 2290
+          name: "Lawra",
+          referredin: 6000,
+          referredout: 2900,
+          feedback: 2500
         },
         {
-          name: "Page D",
-          uv: 2780,
-          pv: 3908,
-          amt: 2000
+          name: "Jirapa",
+          referredin: 4000,
+          referredout: 2400,
+          feedback: 2400
         },
         {
-          name: "Page E",
-          uv: 1890,
-          pv: 4800,
-          amt: 2181
+          name: "Nandom",
+          referredin: 5600,
+          referredout: 9400,
+          feedback: 3400
         },
         {
-          name: "Page C",
-          uv: 2000,
-          pv: 9800,
-          amt: 2290
+          name: "DBI",
+          referredin: 4000,
+          referredout: 2400,
+          feedback: 2400
         },
         {
-          name: "Page D",
-          uv: 2780,
-          pv: 3908,
-          amt: 2000
+          name: "Wa east",
+          referredin: 4000,
+          referredout: 2400,
+          feedback: 2400
         },
         {
-          name: "Page E",
-          uv: 1890,
-          pv: 4800,
-          amt: 2181
-        }
+          name: "Wa West",
+          referredin: 4000,
+          referredout: 2400,
+          feedback: 2400
+        },
+        {
+          name: "Lambussie",
+          referredin: 4000,
+          referredout: 2400,
+          feedback: 2400
+        },
+        {
+          name: "Sissala East",
+          referredin: 4800,
+          referredout: 2490,
+          feedback: 2480
+        },
+        {
+          name: "Sissala West",
+          referredin: 2000,
+          referredout: 1400,
+          feedback: 2400
+        },
       ];
       
     return ( 
         <section>
     <BarChart
-      width={1000}
+      width={1400}
       overFlowX={'scroll'}
       height={300}
       data={data}
       margin={{
       top: 20,
-      right: 30,
-      left: 20,
+      right: 10,
+      left: 10,
       bottom: 5
       }}
     >
@@ -72,8 +90,9 @@ const Chart = () => {
       <YAxis />
       <Tooltip />
       <Legend />
-      <Bar dataKey="pv" stackId="a" fill="#8884d8" />
-      <Bar dataKey="uv" stackId="a" fill="#82ca9d" />
+      <Bar dataKey="referredin" stackId="a" fill="#8884d8" />
+      <Bar dataKey="referredout" stackId="a" fill="#82ca9d" />
+      <Bar dataKey="feedback" stackId="a" fill="#673ab7" />
     </BarChart>
         </section>
      );

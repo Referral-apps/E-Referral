@@ -18,11 +18,13 @@ const Refferedstatus = () => {
         setrequestfeedbackdisplay('none')
     }
     return ( 
-    <section className="container padding-top-40">
+    <section className="container padding-top-100">
+
+        <div className="h2">Patient Referral Status</div>
   <div className="horizontal-scroll">
  
-<table class="table stripped full-width">
-    <thead class="indigo">
+<table className="table stripped full-width">
+    <thead className="indigo">
         <th>S/N</th>
         <th>PATIENT NAME</th>
         <th>REFERRING FACILITY</th>
@@ -99,7 +101,7 @@ const Refferedstatus = () => {
 
 <div className="popup back-shadow viewform white padding-20" style={{display:`${modaldisplay}`}}>
     <span className='float-right margin text-x-large pointer  text-pink hover-text-red scale-up' onClick={Closeviewmodal}>
-     <span class="material-icons">
+     <span className="material-icons">
      close
      </span>
     </span>
@@ -121,7 +123,7 @@ const Refferedstatus = () => {
                         <table className='table'>
                             <tr>
                                 <td><div className="text-left">DATE AND TIME:</div></td>
-                                 <td><div class='text-indigo datadisplay'>12 August, 2021</div></td>
+                                 <td><div className='text-indigo datadisplay'>12 August, 2021</div></td>
                             </tr>
                         </table>
                    
@@ -342,7 +344,7 @@ const Refferedstatus = () => {
 
 <div className="popup back-shadow light" style={{display:`${requestfeedbackdisplay}`}}>
     <span className='float-right margin text-x-large pointer text-pink hover-text-red scale-up' onClick={closerequestfeedback}>
-     <span class="material-icons">
+     <span className="material-icons">
      close
      </span>
     </span>

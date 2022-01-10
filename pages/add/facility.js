@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Multiselect from 'multiselect-react-dropdown';
-const Addfacility = () => {
+const Facility = () => {
     const data = [
         {facility: 'Facility One'},
         {facility: 'Facility Two'},
@@ -10,18 +10,21 @@ const Addfacility = () => {
    const [options] = useState(data)
   
     return ( 
-    <section className='light back padding-top-100'>
+    <section className='padding-top-100'>
+<div className="bg"></div>
+<div className="bg bg2"></div>
+<div className="bg bg3"></div>
         <form>
-    <div className="card addfacility light round-edge">
-        <div className="text-larger text-left padding">Add Facility</div>
+    <div className="facility padding-20 round-edge width-500-max center white">
+        <div className="h2 text-left padding">Add Facility</div>
         <div className="hr"></div>
         <div className="padding">
             <div className='text-left'>NAME OF FACILITY</div>
-            <input type="text" placeholder="name of facility" className='input white padding borderless width-100-p'/>
+            <input type="text" placeholder="name of facility" className='input padding bordered full-width'/>
         </div>
         <div className="padding">
             <div className='text-left'>REGION</div>
-            <select name="" id="" className='input borderless white width-100-p padding'>
+            <select name="" id="" className='input padding bordered full-width'>
                 <option value="">WA UPPER WEST REGION</option>
                 <option value="">UPPER EAST REGION</option>
                 <option value="">NORTHEN REGION</option>
@@ -31,7 +34,7 @@ const Addfacility = () => {
         </div>
         <div className="padding">
             <div className='text-left'>DISTRICT</div>
-            <select name="" id="" className='input borderless white width-100-p padding'>
+            <select name="" id="" className='input padding bordered full-width'>
                 <option value="">DISTRICT ONE</option>
                 <option value="">DISTRICT TWO</option>
                 <option value="">DISTRICT THREE</option>
@@ -41,7 +44,7 @@ const Addfacility = () => {
         </div>
         <div className="padding">
             <div className='text-left'>TYPE OF FACILITY</div>
-            <select name="" id="" className='input borderless white width-100-p padding'  >
+            <select name="" id="" className='input padding bordered full-width'  >
                 <option value="">FACILITY ONE</option>
                 <option value="">FACILITY TWO</option>
                 <option value="">FACILITY THREE</option>
@@ -52,7 +55,7 @@ const Addfacility = () => {
         <div className="padding">
             <div className='text-left'>DIAGNOSIS APPLICABLE</div>
               <Multiselect options={options} displayValue='facility' />          
-               <div className="text-left padding"><button className='button blue'>Submit</button></div>
+               <div className="text-left section"><button className='button indigo text-white card'>Add facility</button></div>
                <div>
     
                </div>
@@ -64,4 +67,4 @@ const Addfacility = () => {
      );
 }
  
-export default Addfacility;
+export default Facility;

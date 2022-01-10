@@ -75,17 +75,17 @@ const patientdata = [
     }
 ]
     return ( 
-        <section className="padding-20">
-            <div className="h2 padding">View Patient Referrals</div>
-    <section>
+        <section className="padding-top-100">
+    <section className="padding-20">
+    <div className="h2">View Patient Referrals</div>
 
 <div className="section">
     <input type="text" className="input bordered padding" placeholder="search patient" onChange={(e)=>setsearch(e.target.value)}/>
 </div>
   <div className="horizontal-scroll">
 
-<table class="table stripped text-small">
-    <thead class="indigo">
+<table className="table stripped text-small">
+    <thead className="indigo">
         <th>S/N</th>
         <th>DATE</th>
         <th>NAME</th>
@@ -144,30 +144,13 @@ const patientdata = [
             </tr>
         ))
     }
-    {/* <tr>
-        <td>1</td>
-        <td>Jhon deo</td>
-        <td>JHAN CHPS</td>
-        <td>WA REG HOSPITAL</td>
-        <td>BIRTH</td>
-        <td>DISCHARGED</td>
-
-        <td>
-            <select name="" id="" className='input light width-100-p'>
-                <option value=""></option>
-                <option value="">Yes</option>
-                <option value="">No</option>
-            </select>
-        </td>
-    </tr> */}
-
 </table>
 
   </div>
 
-<div className="popup back-shadow light" style={{display:`${modaldisplay}`}}>
+<div className="popup back-shadow light padding-20" style={{display:`${modaldisplay}`}}>
     <span className='float-right margin text-x-large pointer  text-pink hover-text-red scale-up' onClick={Closeviewmodal}>
-     <span class="material-icons">
+     <span className="material-icons">
      close
      </span>
     </span>
@@ -177,16 +160,18 @@ const patientdata = [
     Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora voluptate aperiam dolore rerum quibusdam aliquam ducimus esse, laudantium itaque, sunt, velit qui commodi soluta modi rem excepturi consequatur ab eligendi?
 </div>
 <div className="popup back-shadow white round-edge" style={{display:`${requestfeedbackdisplay}`}}>
+    <div className="padding-20 hr">
     <span className='float-right margin text-x-large pointer text-pink hover-text-red scale-up' onClick={closerequestfeedback}>
-     <span class="material-icons">
+     <span className="material-icons">
      close
      </span>
     </span>
     <div className="text-left text-larger padding">ADD FEEBACK</div>
-    <div className="hr"></div>
-    <div className="padding">    
+ 
+    </div>
+    <div className="padding-20">    
     <div>
-        <select name="" id="" className='input width-100-p borderless light'>
+        <select name="" id="" className='input full-width padding bordered'>
         <option value="">Discharged</option>
         <option value="">Absconding</option>
         <option value="">Expired</option>
@@ -195,18 +180,19 @@ const patientdata = [
     <div className="hr"></div>
     <div className="">
                 <div className='text-left input-lable'>DETAILS:</div>
-                <textarea rows='5' type="tel" className='input borderless light refer-input' placeholder='DETAILS' />
+                <textarea rows='5' type="tel" className='input bordered padding full-width' placeholder='DETAILS' />
             </div>
-    <table className="table">
-        <tr>
-        <td className="padding">
-            <button className='button indigo tex-large acceptbtn width-100-p' type='submit'>Add Feedback</button>
-        </td>
-        <td className="padding">
-            <div className='button pink tex-large acceptbtn width-100-p' onClick={closerequestfeedback}>Cancel Request</div>
-        </td>
-        </tr>
-    </table>
+
+            <div className="section">
+                <div className="row">
+                    <div className="col sm-6 md-6 lg-6 padding">
+                      <button className='button indigo text-white full-width' type='submit'>Add Feedback</button>
+                    </div>
+                    <div className="col sm-6 md-6 lg-6 padding">
+                    <button className='button pink text-white full-width' onClick={closerequestfeedback}>Cancel Request</button> 
+                    </div>
+                </div>
+            </div>
     </div>
 </div>
     </section> 

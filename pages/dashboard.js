@@ -6,7 +6,7 @@ const Dashboard = () => {
     
     return ( 
 
-<section>
+<section className="padding-top-100">
 <div className="container">
 <div className="row">
 <div className="col sm-12 md-6 lg-4">
@@ -16,7 +16,7 @@ const Dashboard = () => {
      <div className="row">
          <div className="col sm-12 md-12 lg-4 padding">
             <div className="dash-icon content-middle pointer">
-            <span class="material-icons text-light icon size-2">
+            <span className="material-icons text-light icon size-2">
                people
              </span> 
             </div>
@@ -38,7 +38,7 @@ const Dashboard = () => {
      <div className="row">
          <div className="col sm-12 md-12 lg-4 padding">
             <div className="dash-icon content-middle pointer">
-            <span class="material-icons text-light icon size-2">
+            <span className="material-icons text-light icon size-2">
                admin_panel_settings
              </span> 
             </div>
@@ -58,7 +58,7 @@ const Dashboard = () => {
      <div className="row">
          <div className="col sm-12 md-4 lg-4 padding">
             <div className="dash-icon content-middle pointer">
-            <span class="material-icons text-light icon size-2">
+            <span className="material-icons text-light icon size-2">
                equalizer
              </span> 
             </div>
