@@ -1,6 +1,6 @@
 const ReferPatient = () => {
     return ( 
-        <section className="container padding-top-50">
+        <section className="container padding-top-100">
 
             <div className="text-x-large title">
                 REFER PATIENT

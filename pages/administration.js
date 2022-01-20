@@ -15,11 +15,11 @@ const administraion = () => {
              </span> 
             </div>
          </div>
-         <div className="col sm-12 md-12 lg-8">
-             <div className="h2 text-center">Add Facility</div>
+         <div className="col sm-12 md-12 lg-8 padding-20">
+             <div className="h2 text-center header">Add Facility</div>
              <div className="hr"></div>
              <div className="text-center">
-                Add a new facility.
+                Add a new health facility.
              </div>
          </div>
      </div>
@@ -39,8 +39,8 @@ const administraion = () => {
              </span> 
             </div>
          </div>
-         <div className="col sm-12 md-12 lg-8">
-             <div className="h2 text-center">Add User | Officer</div>
+         <div className="col sm-12 md-12 lg-8 padding-20">
+             <div className="h2 text-center header">Add User</div>
              <div className="hr"></div>
              <div className="text-center">
                 Add A User Or Officer

@@ -211,11 +211,11 @@ button{-webkit-appearance:button}link{text-decoration: none;}link:hover{text-dec
 .circle{border-radius: 50%;}
 /* dropdown */
 .dropdown-hover, .dropup-hover{position: relative;width: fit-content;z-index: 1;padding: 5px;}.dropdown-hover > .drop-menu{top: 100%;}.dropup-hover > .drop-menu{bottom: 100%;}
-.drop-menu{position: absolute; box-shadow: 0px 2px 4px rgba(0,0,0,0.2);left: 0;transition: 0.5s;z-index:-1;width: 100%;overflow: hidden;opacity: 0;display: none;}
+.drop-menu{position: absolute; box-shadow: 0px 2px 4px rgba(0,0,0,0.2);right: 0;transition: 0.5s;z-index:-1;width: fit-content;overflow: hidden;opacity: 0;display: none;}
   .dropup-hover:hover .drop-menu{display:block;z-index: 1;opacity: 1;}
 .dropdown-hover:hover .drop-menu{display:block;z-index: 1;opacity: 1;}
 .drop-item{padding: 5px 20px;cursor: pointer;}
-.drop-menu.item-hoverable > .drop-item:hover{background-color: #ddd;}
+.drop-menu.item-hoverable  .drop-item:hover{background-color: #E3E6E8;}
 .drop-button > .rotate-up{transition: 0.3s;margin: 0px 5px;}.drop-button:hover .rotate-up{transform: rotate(180deg);}
 .drop-button > .rotate-down{transition: 0.3s;margin: 0px 5px;}.drop-button:hover .rotate-down{transform: rotate(180deg);}
 /*inputs*/
