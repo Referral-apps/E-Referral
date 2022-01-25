@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Chart from "./Chart"
+import Online from "../components/Online";
 // import {Link} from 'react-router-dom' 
 
 const Dashboard = () => {
@@ -31,6 +32,7 @@ if(JSON.parse(localStorage.getItem("data")) != null || JSON.parse(localStorage.g
     return ( 
 
 <section className="padding-top-100" style={{display:`${online}`}}>
+  <Online />
 <div className="container">
 <div className="row">
 <div className="col sm-12 md-6 lg-4">

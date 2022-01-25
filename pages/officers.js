@@ -18,20 +18,18 @@ import {useRef} from "react"
 import Super from "../components/Super";
 import Online from "../components/Online"
 
-const ViewRefferals = () => {
-
-const [requestfeedbackdisplay, setrequestfeedbackdisplay] = useState('none')
+const Officers = () => {
 const facilityRef = useRef(null);
 const regionRef = useRef(null);
 const districtRef = useRef(null);
 const typeRef = useRef(null);
 const [modaldisplay, setmodaldisplay] = useState('none')
+const [requestfeedbackdisplay, setrequestfeedbackdisplay] = useState('none')
 const [token , settoken] = useState(null)
-const [Allpatients, setAllpatients] = useState(null);
+const [AllOfficers, setAllOfficers] = useState(null);
 const [anchorEl, setAnchorEl] = React.useState(null);
 const [snackbar, setsnackbar] = useState(false);
 const [message, setmessage] = useState("");
-const [patientdata, setpatientdata] = useState([]);
 const dropdown = Boolean(anchorEl);
 
 const endPoint = "https://e-referral-api.herokuapp.com"
@@ -64,17 +62,14 @@ const [search, setsearch] = useState("")
 useEffect(async() => {
     const parsedtoken = JSON.parse(sessionStorage.getItem("token"));
     settoken(parsedtoken)
-    await Axios.get( endPoint + "/patient/allpatients",
+    await Axios.get( endPoint + "/staff/showall",
     {
         headers: {
            authorization: `Bearer ${token}`,
          
         }
      }   
-    ).then((data)=>{
-        // setAllpatients(data.data.staff)
-        setpatientdata(data.data.patients)
-    })
+    ).then((data)=>setAllOfficers(data.data.staff))
     .catch(error=>console.log(error))
 
         // if(JSON.parse(sessionStorage.getItem("token")) != null){
@@ -178,7 +173,8 @@ useEffect(async() => {
     )
     return ( 
         <section className="padding-top-100">
-                        <Snackbar
+          <Online />
+            <Snackbar
                 open={snackbar}
                 autoHideDuration={6000}
                 onClose={()=>setsnackbar(false)}
@@ -311,9 +307,10 @@ useEffect(async() => {
           </Button>
         </DialogActions>
       </Dialog>
-            <Online />
     <section className="padding-20">
-    <div className="h2">View Patient Referrals</div>
+
+      <Super />
+    <div className="h2">All Officers</div>
 
 <div className="section">
     <input type="text" className="input bordered padding" placeholder="search patient" onChange={(e)=>setsearch(e.target.value)}/>
@@ -322,77 +319,67 @@ useEffect(async() => {
 
 <table className="table stripped text-small">
     <thead className="indigo">
-        <th>ID</th>
-        <th>NAME</th>
-        <th>CONTACT</th>
-        <th className="text-center">ACTION</th>
-        {/* <th>OPD/FLD</th>
-        <th>SEX</th>
-        <th>AGE</th>
-        <th>ADDRESS</th>
-        <th>NHIS STATUS</th>
-        <th>REFERRED FROM/TO</th>
-        <th>REFERRAL TYPE</th>
-        <th>PROVISIONAL DIAGNOSIS</th>
-        <th>FINAL DIAGNOSIS</th>
-        <th>OUTCOME</th>
-        <th>ACTION</th>
-        <th>FEEDBACK</th> */}
+        <th>Full Name</th>
+        <th>Email</th>
+        <th>Region</th>
+        <th>District</th>
+        <th>Facility</th>
+        <th>Role</th>
+        <th className="text-center">Actions</th>
+     
     </thead>
-    {
-        patientdata.filter(data=>{
+    {  AllOfficers != null &&
+        AllOfficers.filter(data=>{
          if(search === ""){
-             return patientdata;
+             return AllOfficers;
          }else if(
-         data.name.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.referraltype.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.feedback.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.provisionaldiagnosis.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.finaldiagnosis.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.outcome.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.sex.trim().toLowerCase().includes(search.trim().toLowerCase())
+         data.firstName.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+         data.middleName.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+         data.lastName.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+         data.region.trim().toLowerCase().includes(search.trim().toLowerCase())||
+         data.district.trim().toLowerCase().includes(search.trim().toLowerCase())||
+         data.email.trim().toLowerCase().includes(search.trim().toLowerCase())||
+         data.role.trim().toLowerCase().includes(search.trim().toLowerCase())
+
          ){
              return data;
-         }else if(data.name.trim().toLowerCase().includes(!search.trim().toLowerCase()))
-         {
-             return "No data found"
          }
-        }).map(patient =>(
-            <tr key={patient._id}>
-                <td>{patient._id}</td>
+        }).map(staff =>(
+            <tr key={staff._id}>
                 <td>
-                    {patient.firstname} {patient.middlename} {patient.lastname}
+                    {staff.firstName}  {staff.middleName}  {staff.lastName}
                 </td>
-                <td>
-                    {patient.contact}
-                </td>
-       
+                <td>{staff.email}</td>
+                <td>{staff.region}</td>
+                <td>{staff.district}</td>
+                <td>{staff.facility}</td>
+                <td>{staff.role}</td>
                 <td className="text-center">
 
-<button className="button">
-<MoreHorizIcon
-id="basic-button"
-aria-controls={dropdown ? 'basic-menu' : undefined}
-aria-haspopup="true"
-aria-expanded={dropdown ? 'true' : undefined}
-onClick={handledropopen}
-/>
-</button>
-
-<Menu
-id="basic-menu"
-anchorEl={anchorEl}
-open={dropdown}
-onClose={handledropclose}
-MenuListProps={{
-'aria-labelledby': 'basic-button',
-}}
->
-{/* <MenuItem onClick={}>Edit</MenuItem> */}
-<MenuItem onClick={()=>HandleEdit(staff._id)}>Edit</MenuItem>
-<MenuItem onClick={()=>HandleDelete(staff)}>Delete</MenuItem>
-</Menu>
-</td>
+                    <button className="button">
+                    <MoreHorizIcon
+        id="basic-button"
+        aria-controls={dropdown ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={dropdown ? 'true' : undefined}
+        onClick={handledropopen}
+       />
+                    </button>
+   
+      <Menu
+       id="basic-menu"
+       anchorEl={anchorEl}
+       open={dropdown}
+       onClose={handledropclose}
+       MenuListProps={{
+         'aria-labelledby': 'basic-button',
+       }}
+      >
+        {/* <MenuItem onClick={}>Edit</MenuItem> */}
+        <MenuItem onClick={()=>HandleEdit(staff._id)}>Edit</MenuItem>
+        <MenuItem onClick={()=>HandleDelete(staff)}>Delete</MenuItem>
+      </Menu>
+                </td>
             </tr>
         ))
     }
@@ -400,56 +387,9 @@ MenuListProps={{
 
   </div>
 
-<div className="popup back-shadow light padding-20" style={{display:`${modaldisplay}`}}>
-    <span className='float-right margin text-x-large pointer  text-pink hover-text-red scale-up' onClick={Closeviewmodal}>
-     <span className="material-icons">
-     close
-     </span>
-    </span>
-    <div className="text-left text-larger padding">VIEW FORM</div>
-    <div className="hr"></div>
-    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Veniam accusantium dicta maxime, odio quibusdam velit quam delectus laborum aspernatur perspiciatis, suscipit culpa blanditiis quasi minus impedit aliquam, sapiente voluptatum ullam!
-    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora voluptate aperiam dolore rerum quibusdam aliquam ducimus esse, laudantium itaque, sunt, velit qui commodi soluta modi rem excepturi consequatur ab eligendi?
-</div>
-<div className="popup back-shadow white round-edge" style={{display:`${requestfeedbackdisplay}`}}>
-    <div className="padding-20 hr">
-    <span className='float-right margin text-x-large pointer text-pink hover-text-red scale-up' onClick={closerequestfeedback}>
-     <span className="material-icons">
-     close
-     </span>
-    </span>
-    <div className="text-left text-larger padding">ADD FEEBACK</div>
- 
-    </div>
-    <div className="padding-20">    
-    <div>
-        <select name="" id="" className='input full-width padding bordered'>
-        <option value="">Discharged</option>
-        <option value="">Absconding</option>
-        <option value="">Expired</option>
-        </select>
-    </div>
-    <div className="hr"></div>
-    <div className="">
-                <div className='text-left input-lable'>DETAILS:</div>
-                <textarea rows='5' type="tel" className='input bordered padding full-width' placeholder='DETAILS' />
-            </div>
-
-            <div className="section">
-                <div className="row">
-                    <div className="col sm-6 md-6 lg-6 padding">
-                      <button className='button indigo text-white full-width' type='submit'>Add Feedback</button>
-                    </div>
-                    <div className="col sm-6 md-6 lg-6 padding">
-                    <button className='button pink text-white full-width' onClick={closerequestfeedback}>Cancel Request</button> 
-                    </div>
-                </div>
-            </div>
-    </div>
-</div>
     </section> 
         </section>
      );
 }
  
-export default ViewRefferals;
+export default Officers;

@@ -5,9 +5,10 @@ import * as React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
+import Super from "../../components/Super";
 
 const apiuri = "http://e-referral-api.herokuapp.com/staff/register";
-
+const Endpoint = "https://e-referral-api.herokuapp.com"
 
 
 const Officer = () => {
@@ -24,10 +25,32 @@ const [contact, setcontact] = useState("")
 const [error, seterror] = useState("0px")
 const [message, setmessage] = useState("")
 const [token, settoken] = useState("")
+const [Allfacilities, setAllfacilities] = useState([]);
 useEffect(() => {
-settoken(JSON.parse(localStorage.getItem("data")).token)
+    if(JSON.parse(sessionStorage.getItem("token")) != null){
+        // resolve(data=[{ , role:JSON.parse(localStorage.getItem("data").role)}])
+        const parsedtoken = JSON.parse(sessionStorage.getItem("token"));
+        settoken(parsedtoken)
+    }
 }, [])
+useEffect(async() => {
+    const parsedtoken = JSON.parse(sessionStorage.getItem("token"));
+    settoken(parsedtoken)
+    await Axios.get( Endpoint + "/facility/allfacilities",
+    {
+        headers: {
+           authorization: `Bearer ${token}`,
+         
+        }
+     }   
+    ).then((data)=>setAllfacilities(data.data.facilities))
+    .catch(error=>console.log(error))
 
+        // if(JSON.parse(sessionStorage.getItem("token")) != null){
+        //     const parsedtoken = JSON.parse(sessionStorage.getItem("token"));
+        //     alert(JSON.parse(localStorage.getItem("data").role))   
+        // }
+    })
 
 const Addofficer =() => {
     setloader(true)
@@ -38,7 +61,7 @@ if(firstname === "" || lastname === "" || facility === "facility" || district ==
 }else{
 
    Axios
-    .post("https://e-referral-api.herokuapp.com/staff/register", 
+    .post(endPoint + "/staff/register", 
         {email:email , 
         firstName:firstname,
         lastName:lastname,
@@ -57,7 +80,7 @@ if(firstname === "" || lastname === "" || facility === "facility" || district ==
       }
      ).then(()=>{
          setloader(false)
-         alert("success")
+         window.location.assign("/officers")
      }).catch(err=>{
          setloader(false)
          console.log(err)
@@ -69,6 +92,7 @@ if(firstname === "" || lastname === "" || facility === "facility" || district ==
 
     return ( 
         <section className='padding-top-100'>
+            <Super />
     <Backdrop
     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
     open={loader}
@@ -125,10 +149,15 @@ if(firstname === "" || lastname === "" || facility === "facility" || district ==
                 <div className='text-left'>FACILITY</div>
                 <select name="" id="" className='input bordered padding full-width' onChange={(e)=>setfacility(e.target.value)}>
                 <option value="facility">Select Facility</option>
-                <option value="">FACILITY ONE</option>
-                    <option value="">FACILITY TWO</option>
-                    <option value="">FACILITY THREE</option>
-                    <option value="">FACILITY FIVE</option>
+                {
+                    Allfacilities != [] &&
+                    Allfacilities.map(facility=>(
+                    <option value={facility.name} key={facility.name}>{facility.name}</option>
+                    ))
+                     
+                }
+               
+   
                 </select>
             </div>
             <div className="padding">

@@ -7,29 +7,19 @@ const Navbar = () => {
     const [data, setdata] = useState("")
     const [staff, setstaff] = useState("")
 useEffect(() => {
+
 if(JSON.parse(sessionStorage.getItem("token")) != null || JSON.parse(sessionStorage.getItem("token")) != undefined){
     const user = JSON.parse(localStorage.getItem("data"))
-    const p = new Promise ((resolve , reject)=>{
-        if(user.length != 0){
-        resolve(user)
-        }else{
-    reject()
-        }
-    })
-    p.then(currentuser=>{
     //user is login
-    console.log("online")
-    setloginshow("inline-block")
-    setstaff(user)
-    }).catch(()=>{ 
-        //offline 
-        
-    })
-    
+console.log("online")
+setloginshow("inline-block")
+setstaff(user)
+}else{
 
 }
 },[])
 
+//style={{display:`${loginshow}`}}
   
       
     const [sidewidth, setsidewidth] = useState('0px')
@@ -54,15 +44,15 @@ if(JSON.parse(sessionStorage.getItem("token")) != null || JSON.parse(sessionStor
      
 {
     staff != "" &&
-    <div className="padding">
+    <div className="padding-20">
     <span className="material-icons icon size-2 pointer" onClick={()=>setsidewidth("250px")}>
         menu
     </span>
 </div>  
 }
 
-    <div>
-    <span className="logo padding">E-Referral</span> 
+    <div className="padding-top-20">
+    <span className="logo">E-Referral</span> 
     </div>
 
   
@@ -145,19 +135,19 @@ if(JSON.parse(sessionStorage.getItem("token")) != null || JSON.parse(sessionStor
 
 <div className="hr"></div>
 <div className="section pointer text-left">
- <Link href='/refferedstatus'>
-     <a className="text-white hover-text-blue">
-     <span className="hover-text-blue"> View Referred Patient Status</span> 
-     </a>
- </Link>
+  <Link href='/viewreferrals'>
+      <a className="text-white hover-text-blue">
+      <span className="hover-text-blue">Referrals(Out)</span>
+      </a>
+  </Link>  
 </div>
 <div className="hr"></div>
 <div className="section pointer text-left">
-  <Link href='/viewreferrals'>
-      <a className="text-white hover-text-blue">
-      <span className="hover-text-blue">View Refferals</span>
-      </a>
-  </Link>  
+ <Link href='/refferedstatus'>
+     <a className="text-white hover-text-blue">
+     <span className="hover-text-blue">Referral(In)</span> 
+     </a>
+ </Link>
 </div>
 <div className="hr"></div>
 <div className="section pointer text-left">

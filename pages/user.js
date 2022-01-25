@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-
+import Online from "../components/Online";
 const User = () => {
     const [loginshow, setloginshow] = useState("none")
     const [data, setdata] = useState("")
@@ -17,9 +17,11 @@ const User = () => {
     }, [])
 
     return ( 
+
         <section className="padding-top-100">
+            <Online />
                  {
-                        data != "" &&
+                        data != null &&
 
                         <section>
                                         <div className="row">

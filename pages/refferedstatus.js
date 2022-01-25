@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Online from "../components/Online";
 const Refferedstatus = () => {
     const [modaldisplay, setmodaldisplay] = useState('none')
     const [requestfeedbackdisplay, setrequestfeedbackdisplay] = useState('none')
@@ -19,7 +20,7 @@ const Refferedstatus = () => {
     }
     return ( 
     <section className="container padding-top-100">
-
+        <Online />
         <div className="h2">Patient Referral Status</div>
   <div className="horizontal-scroll">
  

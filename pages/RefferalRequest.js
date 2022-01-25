@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useState } from 'react'
+import Online from "../components/Online";
 const RefferalRequest = () => {
     const [modal1, setmodal1] = useState('none')
     const [modal2, setmodal2] = useState('none')
@@ -28,6 +29,7 @@ const RefferalRequest = () => {
     const title = 'Refferal Request'
     return ( 
         <section className='padding-top-100'>
+            <Online />
      <div className="container border padding-20 margin-top-50">  
      <div className="row">
          <div className="col sm-12 md-6 lg-6 padding">

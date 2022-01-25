@@ -15,6 +15,8 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import {useRef} from "react"
+import Super from "../components/Super";
+import Online from "../components/Online";
 const Facilities = () => {
 const facilityRef = useRef(null);
 const regionRef = useRef(null);
@@ -166,6 +168,7 @@ useEffect(async() => {
     )
     return ( 
         <section className="padding-top-100">
+          <Online />
             <Snackbar
                 open={snackbar}
                 autoHideDuration={6000}
@@ -297,6 +300,8 @@ useEffect(async() => {
         </DialogActions>
       </Dialog>
     <section className="padding-20">
+
+      <Super />
     <div className="h2">All Facilities</div>
 
 <div className="section">

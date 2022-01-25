@@ -47,7 +47,7 @@ const [alert, setalert] = useState("none")
           // localStorage.setItem("data" , "[]")
           setalert("block")
           seterror(err.response.status)
-          seterror(err.response)
+          seterror(err.response.message)
           if(err.response.status === 403){
             window.location.assign("/forbidden")
           }else if (err.response.status === 422){
@@ -78,7 +78,7 @@ const [alert, setalert] = useState("none")
     }
   }
   return ( 
-    <section className="padding-top-100">
+    <section className="padding-top-100 text-small">
               <div className="bg"></div>
 <div className="bg bg2"></div>
 <div className="bg bg3"></div>
@@ -94,7 +94,7 @@ const [alert, setalert] = useState("none")
 </div>
 <div className="section">
     <div className="poppins section text-left lable">Password:</div>
-    <input type="text" className="input padding bordered full-width" placeholder="Password"  onChange={(e)=>setpassword(e.target.value)} />
+    <input type="password" className="input padding bordered full-width" placeholder="Password"  onChange={(e)=>setpassword(e.target.value)} />
 </div>
 
 <div className="section text-small text-red" style={{display:`${alert}`}}>

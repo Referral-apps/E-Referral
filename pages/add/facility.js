@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import Multiselect from 'multiselect-react-dropdown';
+import Super from "../../components/Super";
 
 const Facility = () => {
 //     const data = [
@@ -40,7 +41,7 @@ useEffect(() => {
     // setrole(JSON.parse(localStorage.getItem("data").role)) 
    p.then(token=>{
        settoken(token)
-       alert(JSON.parse(localStorage.getItem("data").role))
+    //    alert(JSON.parse(localStorage.getItem("data").role))
 
    })
     }, [])
@@ -90,6 +91,7 @@ if(name === "" || district === "district"   || region === "region" || type === "
   
     return ( 
     <section className='padding-top-100'>
+        <Super />
             <Backdrop
     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
     open={loader}

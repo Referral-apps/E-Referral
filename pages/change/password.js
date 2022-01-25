@@ -5,7 +5,6 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
-
 import Multiselect from 'multiselect-react-dropdown';
 import { TextField } from "@mui/material";
 const Password = () => {
@@ -14,6 +13,7 @@ const [error, seterror] = useState("0px")
 const [message, setmessage] = useState("")
 const [loader, setloader] = useState(false)
 const [newpassword, setnewpassword] = useState("")
+const [oldpassword, setoldpassword] = useState("");
 const [token, settoken] = useState("")
 const [staff, setstaff] = useState("")
 const [alertsuccess, setalertsuccess] = useState("none")
@@ -24,19 +24,15 @@ settoken(JSON.parse(sessionStorage.getItem("token")))
 setstaff(JSON.parse(localStorage.getItem("data")))
 }, [])
 const Changepassword =() => {
-setalertsuccess("none")
+    setalertsuccess("none")
     setloader(true)
-if(newpassword === ""){
-    setloader(false)
-    seterror("100%")
-    setmessage("Enter your new password.")
-}else{
+    if(newpassword === ""){
+        setloader(false)
+        seterror("100%")
+        setmessage("Enter a new password")
+    }else{
 
-    // if(staff.role === "super" || staff.role === "Super"){
-    //     setloader(false)
-    //     seterror("100%")
-    //     setmessage("")  
-    // }
+
    Axios
     .patch("https://e-referral-api.herokuapp.com/staff/change-password", 
         {password:newpassword
@@ -56,8 +52,7 @@ if(newpassword === ""){
          console.log(err)
      })
 
-}
-
+    }
 }
 
   
@@ -93,6 +88,14 @@ if(newpassword === ""){
         <div className="h2 text-left padding header">Reset Password</div>
         <div className="hr"></div>
         <div className="padding-top-20">
+        {/* <div className="padding">
+            <TextField
+            label="Old password"
+            variant="outlined"
+            fullWidth
+            onChange={(e)=>setoldpassword(e.target.value)}
+             />
+        </div> */}
         <div className="padding">
             <TextField
             label="New password"
