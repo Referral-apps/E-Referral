@@ -46,7 +46,6 @@ const [alert, setalert] = useState("none")
         if(err.response){
           // localStorage.setItem("data" , "[]")
           setalert("block")
-          seterror(err.response.status)
           seterror(err.response.message)
           if(err.response.status === 403){
             window.location.assign("/forbidden")
@@ -55,6 +54,10 @@ const [alert, setalert] = useState("none")
           setalert("block")
           }
         }else if(err.request){
+          if(err.request.status === 0){
+            setalert("block")
+            seterror("Network error, refresh page.")
+          }
           console.log(err.request)
           setalert("block")
 

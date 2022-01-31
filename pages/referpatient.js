@@ -14,6 +14,8 @@ const ReferPatient = () => {
     const [alertsuccess, setalertsuccess] = useState("none")
     const [success, setsuccess] = useState("")
     const [error, seterror] = useState("none")
+    const [Allfacilities, setAllfacilities] = useState("");
+    const [officerdata, setofficerdata] = useState("");
 const [message, setmessage] = useState("")
 const [loader, setloader] = useState(false)
     useEffect(() => {
@@ -28,19 +30,32 @@ const [loader, setloader] = useState(false)
         // setrole(JSON.parse(localStorage.getItem("data").role)) 
        p.then(token=>{
            settoken(token)
-      
+           Axios.get( Endpoint + "/facility/allfacilities",
+           {
+               headers: {
+                   authorization: `Bearer ${token}`,
+                   
+               }
+               }   
+           ).then((data)=>setAllfacilities(data.data.facilities))
+           .catch(error=>console.log(error))
        })
         }, [])
     
-        
-    const Submit = (e)=>{
+useEffect(() => {
+    const officer = JSON.parse(localStorage.getItem("data"))
+    setofficerdata(officer);
+    // alert(officer._id)
+    })
+
+    const Submit = async(e)=>{
     const current = patient.current;
     setloader(true)
     e.preventDefault()
     const number = current["patient_no"].value
-    const date_time = current["date_time"].value
-    const referring_facility = current["referring_facility"].value
-    const referred_to = current["referred_to"].value
+    // const date_time = current["date_time"].value
+    // const facility_referred_from_to = current["referring_facility"].value
+    const facility_referred_to_id = current["referred_to"].value
     const departure_time = current["departure_time"].value
     const first_name = current["first_name"].value
     const last_name = current["last_name"].value
@@ -63,9 +78,9 @@ const [loader, setloader] = useState(false)
     const commitment_for_next_level = current["commitment_for_next_level"].value
 
     const data = {
-        created:date_time,
-        facility_referred_to:referred_to,
-        facility_referred_from:referring_facility,
+        // created:date_time,
+        facility_referred_to_id:facility_referred_to_id,
+        // facility_referred_from_id:facility_referred_from,
         time_of_departure:departure_time,
         firstname:first_name,
         middlename:middle_name,
@@ -81,21 +96,23 @@ const [loader, setloader] = useState(false)
         pulse:pulse,
         respiratory_rate:respiratory_rate,
         weight:weight,
-        investigation_carried:investigation_carried,
         diagnosis:diagnosis,
         treatment_given:treatment_given,
+        investigation_carried:investigation_carried,
         reason_for_referral:reason_for_referral,
         commitment_for_next_level:commitment_for_next_level,
-        officer:[]
+        officer_id:officerdata._id,
+        reason:"",
+        forwardDetails:[],
+        forwardingTo:[]
 
     }
  
-    console.log(data)
-    Axios
-    .post(Endpoint + "/patient/register", `${data}`,
+  await  Axios
+    .post(Endpoint + "/patient/register/", data ,
       {
          headers: {
-            authorization: `Bearer ${token}`,
+            authorization: `Bearer ${token}`
           
          }
       }
@@ -107,7 +124,8 @@ const [loader, setloader] = useState(false)
         //  window.location.assign("/facilities")
      }).catch(err=>{
          setloader(false)
-         console.log(err.message)
+         setmessage(err.message)
+         seterror("block")
      })
 
 
@@ -144,11 +162,22 @@ const [loader, setloader] = useState(false)
                 <div className="hr"></div>
                     <div className="padding">
                         <div className='text-left input-lable'>NAME OF REFFERING HEALTH FACILITY:</div>
-                        <input type="text" className='input full-width bordered padding' name="referring_facility" placeholder='NAME OF REFFERING HEALTH FACILITY' />
+                        <input type="text" value="8o32472457528" className='input full-width bordered padding' name="referring_facility" placeholder='NAME OF REFFERING HEALTH FACILITY' />
                     </div>
                     <div className="padding">
                         <div className='text-left input-lable'>NAME OF HEALTH FACILITY REFFERED TO:</div>
-                        <input type="text" className='input full-width bordered padding' name="referred_to" placeholder='NAME OF HEALTH FACILITY REFFERED TO' />
+                        <select name="referred_to" id="" className='input bordered padding full-width'>
+                <option value="facility">Select Facility</option>
+                {
+                    Allfacilities != [] &&
+                    Allfacilities.map(facility=>(
+                    <option value={facility._id} key={facility._id}>{facility.name}</option>
+                    ))
+                     
+                }
+               
+   
+                </select>
                     </div>
                     <div className="padding">
                         <div className='text-left input-lable'>TIME OF DEPATURE:</div>
@@ -163,7 +192,7 @@ const [loader, setloader] = useState(false)
                     <div className="col sm-12 md-6 lg-6">
                     <div className="padding">
                         <div className='text-left input-lable'>FIRST NAME:</div>
-                        <input type="text" className='input full-width bordered padding' name="first_name" placeholder='FIRST NAME' />
+                        <input type="text" value="Iddris" className='input full-width bordered padding' name="first_name" placeholder='FIRST NAME' />
                     </div>
                     </div>
                     <div className="col sm-12 md-6 lg-6">
@@ -175,7 +204,7 @@ const [loader, setloader] = useState(false)
                     <div className="col sm-12 md-6 lg-6">
                     <div className="padding">
                         <div className='text-left input-lable'>LAST NAME:</div>
-                        <input type="text" className='input full-width bordered padding' name="last_name" placeholder='LAST NAME' />
+                        <input type="text" value="Wahab" className='input full-width bordered padding' name="last_name" placeholder='LAST NAME' />
                     </div>
                     </div>
                     <div className="col sm-12 md-6 lg-6">
@@ -227,12 +256,14 @@ const [loader, setloader] = useState(false)
      <div className="hr"></div>
          <div className="padding">
          <div className='text-left input-lable'>PRESENTING COMPLAINTS:</div>
-         <textarea name="presenting_complaints" id="" cols="30" rows="3" className='input bordered full-width padding' placeholder='PRESENTING COMPLAINTS' />
+         <textarea name="presenting_complaints" value="   Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos hic ratione quae illo et" id="" cols="30" rows="3" className='input bordered full-width padding' placeholder='PRESENTING COMPLAINTS' />
          </div>
          <div className="padding">
          <div className='text-left input-lable'>EXAMINATION OF FINDINGS:</div>
-         <textarea name="exam_findings" id="" cols="30" rows="3" className='input bordered full-width padding' placeholder='EXAMINATION OF FINDINGS' />
+         <textarea name="exam_findings" value="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos hic ratione quae illo et" id="" cols="30" rows="3" className='input bordered full-width padding' placeholder='EXAMINATION OF FINDINGS' />
          </div>
+ 
+
          <div className="row">
              <div className="col sm-12 md-6 lg-6">
              <div className="padding">
@@ -298,38 +329,7 @@ const [loader, setloader] = useState(false)
         <textarea name="commitment_for_next_level" id="" cols="30" rows="5" className='input bordered full-width padding' placeholder='COMMITMENT FOR NEXT LEVEL' />
         </div>
         <div className="border padding section">
-        <div className="text-larger text-left input-title">Officer Referring</div>
-        <div className="hr"></div>  
-
-        <div className="row">
-            <div className="col sm-12 md-6 lg-6">
-            <div className="padding">
-        <div className='text-left input-lable'>NAME OF OFFICER REFERRING:</div>
-        <input name="" id="" type='text' className='input full-width bordered padding' placeholder='NAME OF OFFICER REFERRING' />
-        </div>
-            </div>
-            <div className="col sm-12 md-6 lg-6">
-
-            <div className="padding">
-       <div className='text-left input-lable'>POSITION:</div>
-        <input name="" type='text' id="" className='input full-width bordered padding' placeholder='POSITION' />
-        </div>
-            </div>
-        </div> 
-
-       <div className="row">
-           <div className="col sm-12 md-6">
-           <div className="padding">
-        <div className='text-left input-lable'>SIGNATURE:</div>
-        <input type="file" className='input full-width bordered padding' />
-        </div>   
-           </div>
-           <div className="col sm-12 md-6 lg-6">
-           <div className="padding">
-       <div className='text-left input-lable'>CONTACT:</div>
-        <input name="" id="" type='tel' className='input full-width bordered padding' placeholder='POSITION' />
-        </div>
-           </div>
+            <div className="row">
              <div className="col sm-12 md-12 lg-12 text-left padding">
              <div className="padding" style={{display:`${alertsuccess}`, width:"100%"}} onClick={()=>setalertsuccess("none")}>
        <Alert severity="success">{success}</Alert>

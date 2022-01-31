@@ -81,7 +81,8 @@ if(name === "" || district === "district"   || region === "region" || type === "
          window.location.assign("/facilities")
      }).catch(err=>{
          setloader(false)
-         console.log(err)
+         seterror("block")
+         setmessage(err.message)
      })
 
 }
@@ -163,7 +164,7 @@ if(name === "" || district === "district"   || region === "region" || type === "
             <div className="section text-small text-red" style={{display:`${error}`}}>
             <Alert severity="error">{message}</Alert>
             </div>
-          <div className="text-left section padding"><button className='button indigo card text-white' onClick={Addfacility}>Add Officer</button></div>
+          <div className="text-left section padding"><button className='button indigo card text-white' onClick={Addfacility}>Add Facility</button></div>
     </div>
  
     </section>

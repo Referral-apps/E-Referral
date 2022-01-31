@@ -61,7 +61,7 @@ if(firstname === "" || lastname === "" || facility === "facility" || district ==
 }else{
 
    Axios
-    .post(endPoint + "/staff/register", 
+    .post(Endpoint + "/staff/register", 
         {email:email , 
         firstName:firstname,
         lastName:lastname,
@@ -152,7 +152,7 @@ if(firstname === "" || lastname === "" || facility === "facility" || district ==
                 {
                     Allfacilities != [] &&
                     Allfacilities.map(facility=>(
-                    <option value={facility.name} key={facility.name}>{facility.name}</option>
+                    <option value={facility.name} key={facility._id}>{facility.name}</option>
                     ))
                      
                 }

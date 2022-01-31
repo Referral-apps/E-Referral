@@ -19,6 +19,8 @@ import Super from "../components/Super";
 import Online from "../components/Online"
 
 const ViewRefferals = () => {
+const patientEdit = useRef(null);
+
 
 const [requestfeedbackdisplay, setrequestfeedbackdisplay] = useState('none')
 const facilityRef = useRef(null);
@@ -86,20 +88,16 @@ useEffect(async() => {
 
     //delete
     const [Deletemodal, setDeletemodal] = React.useState(false);
-    const [DeleteOfficer, setDeleteOfficer] = useState("");;
+    const [DeletePatient, setDeletePatient] = useState("");;
     const HandleDelete = (Officer)=>{
         setDeletemodal(true)
-        setDeleteOfficer(Officer)
+        setDeletePatient(Officer)
 
     }
 
     const Delete = async()=>{
-        if(DeleteOfficer.role === "Super"){
-            setmessage("Account can not be deleted.")
-            setsnackbar(true)
-            setDeletemodal(false)
-        }else{
-      await  Axios.delete(`${endPoint}/staff/delete/${DeleteOfficer._id}` , 
+ 
+      await  Axios.delete(`${endPoint}/staff/delete/${DeletePatient._id}` , 
       {
         headers: {
            authorization: `Bearer ${token}`,
@@ -107,7 +105,7 @@ useEffect(async() => {
         }
      }  
         ).then(()=>{s
-            setmessage( DeleteOfficer.email + " " + "deleted successfully")
+            setmessage( DeletePatient.email + " " + "deleted successfully")
             setDeletemodal(false)
             setsnackbar(true)
 
@@ -115,43 +113,76 @@ useEffect(async() => {
         .catch(error => {
             console.error('There was an error!', error);
         });
-    }
 }
-    //editfacility
+    //editpateint
     const [EditModal, setEditModal] = useState(false);
     const [EditId, setEditId] = useState("");
-    const [currentfacility, setcurrentfacility] = useState("");
+    const [editpatient, seteditpatient] = useState("");
+    const [currentpatient, setcurrentpatient] = useState("");
     const [defaultValue, setdefaultValue] = useState(false);
-    const HandleEdit = async(id)=>{
+    const HandleEdit = async(edit)=>{
         setEditModal(true)
-        setEditId(id)
-        await Axios.get( endPoint + "/facility/find/:" + id,
-        {
-            headers: {
-               authorization: `Bearer ${token}`,
-             
-            }
-         }   
-        ).then((data)=>{
-            setcurrentfacility(data.data.facility)
-            setdefaultValue(true)
-        })
+        setEditId(edit._id)
+        seteditpatient(edit)
+        setcurrentpatient(edit)
+        setdefaultValue(true)
+        console.log(edit)
     }
 
     const UpdateFacility = async()=>{
-        const reffacility = facilityRef.current;
-        const updatefacility = reffacility["facility"].value
-
-        const refdistrict = districtRef.current;
-        const updatedistrict = refdistrict["district"].value
-
-        const refregion = regionRef.current;
-        const updateregion = refregion["region"].value
+        const current = patientEdit.current;
+        const date_time = current["date_time"].value
+        const referring_facility = current["referring_facility"].value
+        const referred_to = current["referred_to"].value
+        const departure_time = current["departure_time"].value
+        const first_name = current["first_name"].value
+        const last_name = current["last_name"].value
+        const middle_name = current["middle_name"].value
+        const sex = current["sex"].value
+        const date_of_birth = current["date_of_birth"].value
+        const relative_name = current["relative_name"].value
+        const insurance = current["insurance_status"].value
+        const relative_contact = current["relative_contact"].value
+        const presenting_complaints = current["presenting_complaints"].value
+        const exam_findings = current["exam_findings"].value
+        const temperature = current["temperature"].value
+        const pulse = current["pulse"].value
+        const respiratory_rate = current["respiratory_rate"].value
+        const weight = current["weight"].value
+        const investigation_carried = current["investigation_carried"].value
+        const diagnosis = current["diagnosis"].value
+        const treatment_given = current["treatment_given"].value
+        const reason_for_referral = current["reason_for_referral"].value
+        const commitment_for_next_level = current["commitment_for_next_level"].value
         
-        const reftype = typeRef.current;
-        const updatetype = reftype["type"].value
+        const Editdata = {
+            time_of_departure:departure_time,
+            firstname:first_name,
+            middlename:middle_name,
+            lastname:last_name,
+            sex:sex,
+            dob:date_of_birth,
+            insurance:insurance,
+            relative_name:relative_name,
+            contact:relative_contact,
+            presenting_complaints: presenting_complaints,
+            exam_findings:exam_findings,
+            temperature:temperature,
+            pulse:pulse,
+            respiratory_rate:respiratory_rate,
+            weight:weight,
+            diagnosis:diagnosis,
+            treatment_given:treatment_given,
+            investigation_carried:investigation_carried,
+            reason_for_referral:reason_for_referral,
+            commitment_for_next_level:commitment_for_next_level,
+            // reason:res,
+        
+        
+        }
+        
 
-        await Axios .patch(endPoint + "/facility/update/:" + EditId , {name:updatefacility , region:updateregion , district:updatedistrict, type_of_facility:updatetype},
+        await Axios .patch(endPoint + "/patient/update/:" + EditId ,Editdata,
         {
             headers: {
                authorization: `Bearer ${token}`,
@@ -161,6 +192,8 @@ useEffect(async() => {
         ).then(()=>{
             setmessage("updated successfully")
             setsnackbar(true)
+        }).catch(err=>{
+            console.log(err.message)
         })
     }
 
@@ -197,7 +230,7 @@ useEffect(async() => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
               <div className="">
-                 Are you sure you want to delete {DeleteOfficer.email}
+                 Are you sure you want to delete {DeletePatient.email}
               </div>
             Deleting an officer will wipe out all the database related to that officer.
           </DialogContentText>
@@ -216,90 +249,193 @@ useEffect(async() => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Update Facility"}
+          {"Edit Patient"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
               {
                   defaultValue === true && 
-                  <div className="width-400-max">
-            <div className="section">
-                <form ref={facilityRef}>
-                <TextField 
-                  variant="outlined"
-                  defaultValue={currentfacility.name}
-                  label="Facility"
-                  fullWidth
-                  name="facility"
-                  />
-                </form>
-              </div>
-                  <div className="section">
-                      <form ref={regionRef}>
-                      <TextField 
-                  variant="outlined"
-                  select
-                  defaultValue={currentfacility.region}
-                  label="Region"
-                  fullWidth
-                  SelectProps={{
-                    native: true,
-                }}
-                name="region"
-                  >
-                    <option value="Upper West Region">WA UPPER WEST REGION</option>
-                    <option value="Upper East Region">UPPER EAST REGION</option>
-                    <option value="Northen Region">NORTHEN REGION</option>
-                    </TextField>
-                      </form>
-              </div>
-                  <div className="section">
-                      <form ref={districtRef}>
-                      <TextField 
-                  variant="outlined"
-                  select
-                  defaultValue={currentfacility.district}
-                  label="District"
-                  fullWidth
-                  SelectProps={{
-                    native: true,
-                }}
-                name="district"
-                  >
-                  <option value="Wa Municipal">Wa Municipal</option>
-                    <option value="Jirapa">Jirapa</option>
-                    <option value="Labussie Karni">Lambussie Karni</option>
-                    <option value="Sissla East">Sissala East</option>
-                    <option value="Sissla West">Sissala West</option>
-                    <option value="Wa East">Wa East</option>
-                    <option value="Wa West">Wa West</option>
-                </TextField>
-                      </form>
-      
-              </div>
-                  <div className="section">
-                      <form ref={typeRef}>
-                      <TextField
-                  fullWidth
-                select
-                label="facility type"
-                defaultValue={currentfacility.district.type_of_facility}
-                SelectProps={{
-                    native: true,
-                }}
-                variant="outlined"
-                name="type"
-                >
-                        <option value="Regional Office">Regional Office</option>
-                <option value="District Office">District Office</option>
-                <option value="Hospital">Hospital</option>
-                <option value="Health Center">Health Center</option>
-                <option value="CHPS">CHPS</option>
-                <option value="Ply Clinic">Poly Clinic</option>
-        </TextField>  
-                      </form>
-              </div>
-                  </div>
+              <section>
+                  <form ref={patientEdit}>
+           <div className="row">
+               <div className="col sm-12 md-12 lg-12 padding">
+                   <div className="border margin-bottom-10">
+                   <div className="row">
+                    <div className="col sm-12 md-12 lg-12 padding">
+                        <div className="text-left">PATIENT REG NO:</div>
+                        <TextField variant="outlined" label="" defaultValue={currentpatient.id} disabled type="text" className='input full-width bordered padding' name="patient_no" placeholder='Patient Reg No' />
+                    </div>
+                    <div className="col sm-12 md-12 lg-12 padding">
+                    <div className="text-left">DATE AND TIME:</div>
+                        <TextField variant="outlined" label="" defaultValue={currentpatient.created} type="datetime-local" className='input full-width bordered padding' name="date_time"/>
+                    </div>
+                </div>
+                   </div>
+                <div className="border padding">
+                <div className="text-larger text-left input-title">Health Facility Information</div>
+                <div className="hr"></div>
+                    <div className="padding">
+                        <div className='text-left input-lable'>NAME OF REFFERING HEALTH FACILITY:</div>
+                        <TextField variant="outlined" label=""  defaultValue={currentpatient.facility_referred_from} type="text" className='input full-width bordered padding' name="referring_facility" placeholder='NAME OF REFFERING HEALTH FACILITY' />
+                    </div>
+                    <div className="padding">
+                        <div className='text-left input-lable'>NAME OF HEALTH FACILITY REFFERED TO:</div>
+                        <TextField variant="outlined" label=""  defaultValue={currentpatient.facility_referred_to} type="text" className='input full-width bordered padding' name="referred_to" placeholder='NAME OF HEALTH FACILITY REFFERED TO' />
+                    </div>
+                    <div className="padding">
+                        <div className='text-left input-lable'>TIME OF DEPATURE:</div>
+                        <TextField variant="outlined" label="" defaultValue={currentpatient.time_of_departure} type="time" className='input full-width bordered padding' name="departure_time" placeholder='TIME OF DEPATURE' />
+                    </div>
+
+                </div>
+                <div className="border padding section">
+                <div className="text-larger text-left input-title">Patient | Client Information</div>
+                <div className="hr"></div>
+                <div className="row">
+                    <div className="col sm-12 md-6 lg-6">
+                    <div className="padding">
+                        <div className='text-left input-lable'>FIRST NAME:</div>
+                        <TextField variant="outlined" label="" defaultValue={currentpatient.firstname} type="text" className='input full-width bordered padding' name="first_name" placeholder='FIRST NAME' />
+                    </div>
+                    </div>
+                    <div className="col sm-12 md-6 lg-6">
+                    <div className="padding">
+                        <div className='text-left input-lable'>MIDDLE NAME:</div>
+                        <TextField variant="outlined" label="" defaultValue={currentpatient.middlename} type="text" className='input full-width bordered padding' name="middle_name" placeholder='MIDDLE NAME' />
+                    </div>
+                    </div>
+                    <div className="col sm-12 md-6 lg-6">
+                    <div className="padding">
+                        <div className='text-left input-lable'>LAST NAME:</div>
+                        <TextField variant="outlined" label="" defaultValue={currentpatient.lastname} type="text" className='input full-width bordered padding' name="last_name" placeholder='LAST NAME' />
+                    </div>
+                    </div>
+                    <div className="col sm-12 md-6 lg-6">
+                    <div className="padding">
+                        <div className='text-left input-lable'>SEX:</div>
+                            <select name="sex" id="" className='input full-width bordered padding'>
+                            {/* <option value="sex">Sex</option> */}
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            </select>
+                    </div>
+                    </div>
+                </div>
+  
+        <div className="row">
+            <div className="col sm-12 md-6 lg-6">
+            <div className="padding">
+                <div className='text-left input-lable'>INSURANCE STATUS:</div>
+                <select name="insurance_status" id="" className='input full-width bordered padding'>
+                <option value="NON INSURANCE">NON-INSURANCE</option>
+                <option value="NON INSURANCE">INSURANCE</option>
+                </select>
+            </div>
+            </div>
+            <div className="col sm-12 md-6 lg-6">
+            <div className="padding">
+                <div className='text-left input-lable'>DATE OF BIRTH:</div>
+                <TextField variant="outlined" label="" defaultValue={currentpatient.dob} type="date" name="date_of_birth" className='input full-width bordered padding' placeholder='DATE OF BIRTH' />
+            </div> 
+            </div>
+        </div>
+        <div className="row">
+            <div className="col sm-12 md-12 lg-6">
+            <div className="padding">
+                <div className='text-left input-lable'>NAME OF RELATIVE:</div>
+                <TextField variant="outlined" label="" defaultValue={currentpatient.relative_name} type="text" name="relative_name" className='input full-width bordered padding' placeholder='NAME OF RELATIVE' />
+            </div>
+            </div>
+            <div className="col sm-12 md-12 lg-6">
+            <div className="padding">
+                <div className='text-left input-lable'>CONTACT OF RELATIVE:</div>
+                <TextField variant="outlined" label="" defaultValue={currentpatient.contact} type="tel" name="relative_contact" className='input full-width bordered padding' placeholder='CONTACT OF RELATIVE' />
+            </div>
+         </div>
+            </div>
+        </div>
+        <div className="border padding section">
+     <div className="text-larger text-left input-title">Patient | Client Clinical Details</div>
+     <div className="hr"></div>
+         <div className="padding">
+         <div className='text-left input-lable'>PRESENTING COMPLAINTS:</div>
+         <TextField variant="outlined" fullWidth multiline defaultValue={currentpatient.presenting_complaints} name="presenting_complaints" id="" cols="30" rows="3" className='input bordered full-width padding' placeholder='PRESENTING COMPLAINTS' />
+         </div>
+         <div className="padding">
+         <div className='text-left input-lable'>EXAMINATION OF FINDINGS:</div>
+         <TextField variant="outlined" fullWidth multiline defaultValue={currentpatient.exam_findings} name="exam_findings" id="" cols="30" rows="3" className='input bordered full-width padding' placeholder='EXAMINATION OF FINDINGS' />
+         </div>
+         <div className="row">
+             <div className="col sm-12 md-6 lg-6">
+             <div className="padding">
+             <div className='text-left input-lable'>TEMPERATURE:</div>
+             <TextField variant="outlined" label="" defaultValue={currentpatient.temperature} type="number" name="temperature" className='input full-width bordered padding' placeholder='TEMPERATURE' />
+             </div>
+             </div>
+             <div className="col sm-12 md-6 lg-6">
+             <div className="padding ">
+             <div className='text-left input-lable'>PULSE</div>
+             <TextField variant="outlined" label="" defaultValue={currentpatient.pulse} type="number" name="pulse" className='input full-width bordered padding' placeholder='PULSE' />
+         </div>
+             </div>
+         </div>
+         <div className="row">
+             <div className="col sm-12 md-6 lg-6">
+             <div className="padding">
+             <div className='text-left input-lable'>RESPIRATORY RATE:</div>
+             <TextField variant="outlined" label="" defaultValue={currentpatient.respiratory_rate} type="number" name="respiratory_rate" className='input full-width bordered padding' placeholder='RESPIRATORY RATE' />
+             </div>
+             </div>
+             <div className="col sm-12 md-6 lg-6">
+             <div className="padding">
+             <div className='text-left input-lable'>weight:</div>
+             <TextField variant="outlined" label="" defaultValue={currentpatient.weight} type="number" name="weight" className='input full-width bordered padding' placeholder='WEIGHT' />
+             </div>
+             </div>
+         </div>
+
+
+</div>
+</div>
+
+        <div className="col sm-12 md-12 lg-12 padding">
+        <div className="border padding">
+          <div className="text-larger text-left input-title">Results Of Investigation Carried Out</div>
+          <div className="hr"></div>
+          <div className="padding">
+              <TextField variant="outlined" fullWidth multiline defaultValue={currentpatient.investigation_carried} name="investigation_carried" id="" cols="30" rows="5" className='input bordered full-width padding' placeholder='RESULTS OF INVESTIGATION' />
+          </div>
+
+        </div>
+        <div className="border padding section">
+          {/* <div className='text-left input-lable'>TYPE OF DIAGNOSIS:</div>
+         <select name="diagnosis" id="" className='input full-width bordered padding'>
+          <option value="First diagnosis">Disgnosis One</option>
+         </select> */}
+         <div className="padding">
+              <div className='text-left input-lable'>DIAGNOSIS:</div>
+              <TextField variant="outlined" fullWidth multiline defaultValue={currentpatient.diagnosis} name="diagnosis" id="" cols="30" rows="5" className='input bordered full-width padding' placeholder='DIAGNOSIS' />
+          </div>
+        </div>
+        <div className="border padding section">
+        <div className="text-larger text-left input-title">Management | Treament Given</div>
+        <div className="hr"></div>
+        <TextField variant="outlined" fullWidth multiline defaultValue={currentpatient.treatment_given} name="" id="treatment_given" cols="30" rows="5" className='input bordered full-width padding' placeholder='MANAGEMENT | TREATMENT GIVEN' />
+
+        </div>
+        <div className="border padding section">
+        <div className='text-left input-lable'>REASON FOR REFERRAL:</div>
+        <TextField variant="outlined" fullWidth multiline defaultValue={currentpatient.reason_for_referral} name="reason_for_referral" id="" cols="30" rows="5" className='input bordered full-width padding' placeholder='REASON FOR REFERRAL' />
+        <div className='text-left input-lable'>COMMITMENT FOR NEXT LEVEL:</div>
+        <TextField variant="outlined" fullWidth multiline defaultValue={currentpatient.commitment_for_next_level} name="commitment_for_next_level" id="" cols="30" rows="5" className='input bordered full-width padding' placeholder='COMMITMENT FOR NEXT LEVEL' />
+        </div>
+  
+        </div>
+
+           </div>
+
+ </form>
+              </section>
               }
   
           </DialogContentText>
@@ -316,7 +452,7 @@ useEffect(async() => {
     <div className="h2">View Patient Referrals</div>
 
 <div className="section">
-    <input type="text" className="input bordered padding" placeholder="search patient" onChange={(e)=>setsearch(e.target.value)}/>
+    <TextField variant="outlined" label="" defaultValue={currentpatient} type="text" className="input bordered padding" placeholder="search patient" onChange={(e)=>setsearch(e.target.value)}/>
 </div>
   <div className="horizontal-scroll">
 
@@ -325,6 +461,7 @@ useEffect(async() => {
         <th>ID</th>
         <th>NAME</th>
         <th>CONTACT</th>
+        <th>STATUS</th>
         <th className="text-center">ACTION</th>
         {/* <th>OPD/FLD</th>
         <th>SEX</th>
@@ -366,6 +503,16 @@ useEffect(async() => {
                 <td>
                     {patient.contact}
                 </td>
+                <td>
+                    {
+                      patient.forward === false &&
+                      <span>Pending request.</span>
+                    }
+                    {
+                      patient.forward === true &&
+                      <span>Patient accepted.</span>
+                    }
+                </td>
        
                 <td className="text-center">
 
@@ -389,8 +536,8 @@ MenuListProps={{
 }}
 >
 {/* <MenuItem onClick={}>Edit</MenuItem> */}
-<MenuItem onClick={()=>HandleEdit(staff._id)}>Edit</MenuItem>
-<MenuItem onClick={()=>HandleDelete(staff)}>Delete</MenuItem>
+<MenuItem onClick={()=>HandleEdit(patient)}>Edit</MenuItem>
+<MenuItem onClick={()=>HandleDelete(patient)}>Delete</MenuItem>
 </Menu>
 </td>
             </tr>
@@ -400,53 +547,6 @@ MenuListProps={{
 
   </div>
 
-<div className="popup back-shadow light padding-20" style={{display:`${modaldisplay}`}}>
-    <span className='float-right margin text-x-large pointer  text-pink hover-text-red scale-up' onClick={Closeviewmodal}>
-     <span className="material-icons">
-     close
-     </span>
-    </span>
-    <div className="text-left text-larger padding">VIEW FORM</div>
-    <div className="hr"></div>
-    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Veniam accusantium dicta maxime, odio quibusdam velit quam delectus laborum aspernatur perspiciatis, suscipit culpa blanditiis quasi minus impedit aliquam, sapiente voluptatum ullam!
-    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora voluptate aperiam dolore rerum quibusdam aliquam ducimus esse, laudantium itaque, sunt, velit qui commodi soluta modi rem excepturi consequatur ab eligendi?
-</div>
-<div className="popup back-shadow white round-edge" style={{display:`${requestfeedbackdisplay}`}}>
-    <div className="padding-20 hr">
-    <span className='float-right margin text-x-large pointer text-pink hover-text-red scale-up' onClick={closerequestfeedback}>
-     <span className="material-icons">
-     close
-     </span>
-    </span>
-    <div className="text-left text-larger padding">ADD FEEBACK</div>
- 
-    </div>
-    <div className="padding-20">    
-    <div>
-        <select name="" id="" className='input full-width padding bordered'>
-        <option value="">Discharged</option>
-        <option value="">Absconding</option>
-        <option value="">Expired</option>
-        </select>
-    </div>
-    <div className="hr"></div>
-    <div className="">
-                <div className='text-left input-lable'>DETAILS:</div>
-                <textarea rows='5' type="tel" className='input bordered padding full-width' placeholder='DETAILS' />
-            </div>
-
-            <div className="section">
-                <div className="row">
-                    <div className="col sm-6 md-6 lg-6 padding">
-                      <button className='button indigo text-white full-width' type='submit'>Add Feedback</button>
-                    </div>
-                    <div className="col sm-6 md-6 lg-6 padding">
-                    <button className='button pink text-white full-width' onClick={closerequestfeedback}>Cancel Request</button> 
-                    </div>
-                </div>
-            </div>
-    </div>
-</div>
     </section> 
         </section>
      );
