@@ -40,11 +40,13 @@ const [loader, setloader] = useState(false)
            ).then((data)=>setAllfacilities(data.data.facilities))
            .catch(error=>console.log(error))
        })
+       const officer = JSON.parse(localStorage.getItem("data"))
+       setofficerdata(officer);
         }, [])
     
 useEffect(() => {
-    const officer = JSON.parse(localStorage.getItem("data"))
-    setofficerdata(officer);
+    // const officer = JSON.parse(localStorage.getItem("data"))
+    // setofficerdata(officer);
     // alert(officer._id)
     })
 
@@ -192,7 +194,7 @@ useEffect(() => {
                     <div className="col sm-12 md-6 lg-6">
                     <div className="padding">
                         <div className='text-left input-lable'>FIRST NAME:</div>
-                        <input type="text" value="Iddris" className='input full-width bordered padding' name="first_name" placeholder='FIRST NAME' />
+                        <input type="text" className='input full-width bordered padding' name="first_name" placeholder='FIRST NAME' />
                     </div>
                     </div>
                     <div className="col sm-12 md-6 lg-6">
@@ -204,7 +206,7 @@ useEffect(() => {
                     <div className="col sm-12 md-6 lg-6">
                     <div className="padding">
                         <div className='text-left input-lable'>LAST NAME:</div>
-                        <input type="text" value="Wahab" className='input full-width bordered padding' name="last_name" placeholder='LAST NAME' />
+                        <input type="text" className='input full-width bordered padding' name="last_name" placeholder='LAST NAME' />
                     </div>
                     </div>
                     <div className="col sm-12 md-6 lg-6">
@@ -256,11 +258,11 @@ useEffect(() => {
      <div className="hr"></div>
          <div className="padding">
          <div className='text-left input-lable'>PRESENTING COMPLAINTS:</div>
-         <textarea name="presenting_complaints" value="   Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos hic ratione quae illo et" id="" cols="30" rows="3" className='input bordered full-width padding' placeholder='PRESENTING COMPLAINTS' />
+         <textarea name="presenting_complaints"  id="" cols="30" rows="3" className='input bordered full-width padding' placeholder='PRESENTING COMPLAINTS' />
          </div>
          <div className="padding">
          <div className='text-left input-lable'>EXAMINATION OF FINDINGS:</div>
-         <textarea name="exam_findings" value="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos hic ratione quae illo et" id="" cols="30" rows="3" className='input bordered full-width padding' placeholder='EXAMINATION OF FINDINGS' />
+         <textarea name="exam_findings" id="" cols="30" rows="3" className='input bordered full-width padding' placeholder='EXAMINATION OF FINDINGS' />
          </div>
  
 

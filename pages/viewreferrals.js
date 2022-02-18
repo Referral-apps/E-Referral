@@ -34,6 +34,8 @@ const [anchorEl, setAnchorEl] = React.useState(null);
 const [snackbar, setsnackbar] = useState(false);
 const [message, setmessage] = useState("");
 const [patientdata, setpatientdata] = useState([]);
+const [currentfacility, setcurrentfacility] = useState("")
+const [nothing, setnothing] = useState("none")
 const dropdown = Boolean(anchorEl);
 
 const endPoint = "https://e-referral-api.herokuapp.com"
@@ -76,6 +78,8 @@ useEffect(async() => {
     ).then((data)=>{
         // setAllpatients(data.data.staff)
         setpatientdata(data.data.patients)
+        const user = JSON.parse(localStorage.getItem("data"))
+        setcurrentfacility(user._id)
     })
     .catch(error=>console.log(error))
 
@@ -196,6 +200,7 @@ useEffect(async() => {
             console.log(err.message)
         })
     }
+
 
     const action = (
         <React.Fragment>
@@ -449,10 +454,10 @@ useEffect(async() => {
       </Dialog>
             <Online />
     <section className="padding-20">
-    <div className="h2">View Patient Referrals</div>
+    <div className="h2">View Patient Referrals (Out)</div>
 
 <div className="section">
-    <TextField variant="outlined" label="" defaultValue={currentpatient} type="text" className="input bordered padding" placeholder="search patient" onChange={(e)=>setsearch(e.target.value)}/>
+    <TextField variant="outlined" label="" defaultValue={currentpatient} type="text" placeholder="search patient" onChange={(e)=>setsearch(e.target.value)}/>
 </div>
   <div className="horizontal-scroll">
 
@@ -477,24 +482,21 @@ useEffect(async() => {
         <th>FEEDBACK</th> */}
     </thead>
     {
-        patientdata.filter(data=>{
-         if(search === ""){
-             return patientdata;
-         }else if(
-         data.name.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.referraltype.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.feedback.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.provisionaldiagnosis.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.finaldiagnosis.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.outcome.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.sex.trim().toLowerCase().includes(search.trim().toLowerCase())
-         ){
-             return data;
-         }else if(data.name.trim().toLowerCase().includes(!search.trim().toLowerCase()))
-         {
-             return "No data found"
-         }
-        }).map(patient =>(
+               patientdata.filter(data=>{
+                if(currentfacility === ""){
+                    return patientdata;
+                }else if(
+                data.officer === currentfacility && data.firstname.trim().toLowerCase().includes(search.trim().toLowerCase())
+               //  data.referraltype.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+               //  data.feedback.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+               //  data.provisionaldiagnosis.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+               //  data.finaldiagnosis.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+               //  data.outcome.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+               //  data.sex.trim().toLowerCase().includes(search.trim().toLowerCase())
+                ){
+                    return data;
+                }
+               }).map(patient =>(
             <tr key={patient._id}>
                 <td>{patient._id}</td>
                 <td>
@@ -544,7 +546,9 @@ MenuListProps={{
         ))
     }
 </table>
-
+<div className="center fit-width" style={{display:`${nothing}`}}>
+    Nothing to show
+</div>
   </div>
 
     </section> 

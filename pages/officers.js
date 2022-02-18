@@ -69,7 +69,10 @@ useEffect(async() => {
          
         }
      }   
-    ).then((data)=>setAllOfficers(data.data.staff))
+    ).then((data)=>{
+      setAllOfficers(data.data.staff)
+      console.log(data.data.staff)
+    })
     .catch(error=>console.log(error))
 
         // if(JSON.parse(sessionStorage.getItem("token")) != null){
@@ -313,7 +316,7 @@ useEffect(async() => {
     <div className="h2">All Officers</div>
 
 <div className="section">
-    <input type="text" className="input bordered padding" placeholder="search patient" onChange={(e)=>setsearch(e.target.value)}/>
+    <input type="text" className="input bordered padding" placeholder="search officers" onChange={(e)=>setsearch(e.target.value)}/>
 </div>
   <div className="horizontal-scroll">
 

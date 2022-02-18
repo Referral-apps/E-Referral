@@ -152,7 +152,7 @@ if(firstname === "" || lastname === "" || facility === "facility" || district ==
                 {
                     Allfacilities != [] &&
                     Allfacilities.map(facility=>(
-                    <option value={facility.name} key={facility._id}>{facility.name}</option>
+                    <option value={facility._id} key={facility._id}>{facility.name}</option>
                     ))
                      
                 }

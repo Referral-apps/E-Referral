@@ -34,6 +34,7 @@ const [anchorEl, setAnchorEl] = React.useState(null);
 const [snackbar, setsnackbar] = useState(false);
 const [message, setmessage] = useState("");
 const [patientdata, setpatientdata] = useState([]);
+const [currentfacility, setcurrentfacility] = useState("")
 const dropdown = Boolean(anchorEl);
 
 const endPoint = "https://e-referral-api.herokuapp.com"
@@ -76,6 +77,8 @@ useEffect(async() => {
     ).then((data)=>{
         // setAllpatients(data.data.staff)
         setpatientdata(data.data.patients)
+        const user = JSON.parse(localStorage.getItem("data"))
+        setcurrentfacility(user.facility)
     })
     .catch(error=>console.log(error))
 
@@ -449,10 +452,10 @@ useEffect(async() => {
       </Dialog>
             <Online />
     <section className="padding-20">
-    <div className="h2">View Patient Referrals</div>
+    <div className="h2">View Patient Referrals (In)</div>
 
 <div className="section">
-    <TextField variant="outlined" label="" defaultValue={currentpatient} type="text" className="input bordered padding" placeholder="search patient" onChange={(e)=>setsearch(e.target.value)}/>
+    <TextField variant="outlined" label="" defaultValue={currentpatient} type="text"  placeholder="search patient" onChange={(e)=>setsearch(e.target.value)}/>
 </div>
   <div className="horizontal-scroll">
 
@@ -481,18 +484,16 @@ useEffect(async() => {
          if(search === ""){
              return patientdata;
          }else if(
-         data.name.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.referraltype.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.feedback.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.provisionaldiagnosis.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.finaldiagnosis.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.outcome.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-         data.sex.trim().toLowerCase().includes(search.trim().toLowerCase())
+            data.facility_referred_to == currentfacility && data.firstname.trim().toLowerCase().includes(search.trim().toLowerCase())
+        //  data.name.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+        //  data.referraltype.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+        //  data.feedback.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+        //  data.provisionaldiagnosis.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+        //  data.finaldiagnosis.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+        //  data.outcome.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
+        //  data.sex.trim().toLowerCase().includes(search.trim().toLowerCase())
          ){
              return data;
-         }else if(data.name.trim().toLowerCase().includes(!search.trim().toLowerCase()))
-         {
-             return "No data found"
          }
         }).map(patient =>(
             <tr key={patient._id}>

@@ -32,7 +32,7 @@ const User = () => {
                 </div>
                 <div className="col sm-12 md-6 lg-6 padding">
                     <div className="h1 header">
-                    {staff.facility}
+                    {/* {staff.facility} */}
                     </div>
                     <div className="h2 header">
                     {staff.firstName} {staff.middleName} {staff.lastName}
