@@ -34,8 +34,7 @@ useEffect(() => {
     }
 }, [])
 useEffect(async() => {
-    const parsedtoken = JSON.parse(sessionStorage.getItem("token"));
-    settoken(parsedtoken)
+
     await Axios.get( Endpoint + "/facility/allfacilities",
     {
         headers: {
@@ -46,10 +45,6 @@ useEffect(async() => {
     ).then((data)=>setAllfacilities(data.data.facilities))
     .catch(error=>console.log(error))
 
-        // if(JSON.parse(sessionStorage.getItem("token")) != null){
-        //     const parsedtoken = JSON.parse(sessionStorage.getItem("token"));
-        //     alert(JSON.parse(localStorage.getItem("data").role))   
-        // }
     })
 
 const Addofficer =() => {
@@ -66,7 +61,7 @@ if(firstname === "" || lastname === "" || facility === "facility" || district ==
         firstName:firstname,
         lastName:lastname,
         middleName:middlename,
-        facility:facility,
+        facility_id:facility,
         district:district,
         region:region,
         role:role,
@@ -190,7 +185,7 @@ if(firstname === "" || lastname === "" || facility === "facility" || district ==
             </div> */}
             <div className="padding">
                 <div className='text-left'>CONTACT</div>
-                <input type="text" placeholder="CONTACT" className='input bordered padding full-width'  onChange={(e)=>setcontact(e.target.value)}/>
+                <input type="tel" placeholder="CONTACT" className='input bordered padding full-width'  onChange={(e)=>setcontact(e.target.value)}/>
             </div>
 
             <div className="text-left section padding"><button className='button indigo card text-white' onClick={Addofficer}>Add Officer</button></div>

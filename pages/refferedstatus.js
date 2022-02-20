@@ -64,6 +64,10 @@ const closerequestfeedback = ()=>{
 const [filter, setfilter] = useState("")
 const [search, setsearch] = useState("")
 
+useEffect(() => {
+const user = JSON.parse(localStorage.getItem("data"))
+    setcurrentfacility(user.facility)
+})
 useEffect(async() => {
     const parsedtoken = JSON.parse(sessionStorage.getItem("token"));
     settoken(parsedtoken)
@@ -77,8 +81,8 @@ useEffect(async() => {
     ).then((data)=>{
         // setAllpatients(data.data.staff)
         setpatientdata(data.data.patients)
-        const user = JSON.parse(localStorage.getItem("data"))
-        setcurrentfacility(user.facility)
+        console.log(data.data.patients)
+    
     })
     .catch(error=>console.log(error))
 
@@ -481,17 +485,8 @@ useEffect(async() => {
     </thead>
     {
         patientdata.filter(data=>{
-         if(search === ""){
-             return patientdata;
-         }else if(
-            data.facility_referred_to == currentfacility && data.firstname.trim().toLowerCase().includes(search.trim().toLowerCase())
-        //  data.name.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-        //  data.referraltype.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-        //  data.feedback.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-        //  data.provisionaldiagnosis.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-        //  data.finaldiagnosis.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-        //  data.outcome.trim().toLowerCase().includes(search.trim().toLowerCase()) ||
-        //  data.sex.trim().toLowerCase().includes(search.trim().toLowerCase())
+         if(
+            `${data.facility_referred_to}` === currentfacility && data.firstname.trim().toLowerCase().includes(search.trim().toLowerCase())
          ){
              return data;
          }
@@ -504,6 +499,7 @@ useEffect(async() => {
                 <td>
                     {patient.contact}
                 </td>
+       
                 <td>
                     {
                       patient.forward === false &&

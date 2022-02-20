@@ -507,11 +507,11 @@ useEffect(async() => {
                 </td>
                 <td>
                     {
-                      patient.forward === false &&
+                      patient.accepted === false &&
                       <span>Pending request.</span>
                     }
                     {
-                      patient.forward === true &&
+                      patient.accepted === true &&
                       <span>Patient accepted.</span>
                     }
                 </td>

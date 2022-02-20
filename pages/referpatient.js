@@ -3,10 +3,22 @@ import Axios from "axios"
 import * as React from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 import Multiselect from 'multiselect-react-dropdown';
 import Online from "../components/Online";
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from "@mui/material/TextField"
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 const ReferPatient = () => {
     const patient = useRef("");
     const Endpoint = "https://e-referral-api.herokuapp.com"
@@ -15,6 +27,7 @@ const ReferPatient = () => {
     const [success, setsuccess] = useState("")
     const [error, seterror] = useState("none")
     const [Allfacilities, setAllfacilities] = useState("");
+    const [currentfacility, setcurrentfacility] = useState("")
     const [officerdata, setofficerdata] = useState("");
 const [message, setmessage] = useState("")
 const [loader, setloader] = useState(false)
@@ -45,18 +58,15 @@ const [loader, setloader] = useState(false)
         }, [])
     
 useEffect(() => {
-    // const officer = JSON.parse(localStorage.getItem("data"))
-    // setofficerdata(officer);
-    // alert(officer._id)
+    const officer = JSON.parse(localStorage.getItem("data"))
+    setcurrentfacility(officer.facility)
     })
 
     const Submit = async(e)=>{
     const current = patient.current;
     setloader(true)
     e.preventDefault()
-    const number = current["patient_no"].value
-    // const date_time = current["date_time"].value
-    // const facility_referred_from_to = current["referring_facility"].value
+
     const facility_referred_to_id = current["referred_to"].value
     const departure_time = current["departure_time"].value
     const first_name = current["first_name"].value
@@ -82,7 +92,7 @@ useEffect(() => {
     const data = {
         // created:date_time,
         facility_referred_to_id:facility_referred_to_id,
-        // facility_referred_from_id:facility_referred_from,
+        facility_referred_from_id: currentfacility,
         time_of_departure:departure_time,
         firstname:first_name,
         middlename:middle_name,
@@ -104,12 +114,16 @@ useEffect(() => {
         reason_for_referral:reason_for_referral,
         commitment_for_next_level:commitment_for_next_level,
         officer_id:officerdata._id,
-        reason:"",
+        reason:reason_for_referral,
         forwardDetails:[],
         forwardingTo:[]
 
     }
- 
+ if(currentfacility === facility_referred_to_id){
+seterror("block")
+setmessage("You can't refer a patient to your own facility")
+setloader(false)
+ }else{
   await  Axios
     .post(Endpoint + "/patient/register/", data ,
       {
@@ -129,8 +143,7 @@ useEffect(() => {
          setmessage(err.message)
          seterror("block")
      })
-
-
+    }
     }
     return ( 
         <section className="container padding-top-100">
@@ -147,25 +160,19 @@ useEffect(() => {
         <form ref={patient}>
            <div className="row">
                <div className="col sm-12 md-12 lg-6 padding">
-                   <div className="border margin-bottom-10">
+                   {/* <div className="border margin-bottom-10">
                    <div className="row">
-                    <div className="col sm-12 md-12 lg-12 padding">
-                        <div className="text-left">PATIENT REG NO:</div>
-                        <input type="text" className='input full-width bordered padding' name="patient_no" placeholder='Patient Reg No' />
-                    </div>
+
                     <div className="col sm-12 md-12 lg-12 padding">
                     <div className="text-left">DATE AND TIME:</div>
                         <input type="datetime-local" className='input full-width bordered padding' name="date_time" placeholder='DATE AND TIME' />
                     </div>
                 </div>
-                   </div>
+                   </div> */}
                 <div className="border padding">
                 <div className="text-larger text-left input-title">Health Facility Information</div>
                 <div className="hr"></div>
-                    <div className="padding">
-                        <div className='text-left input-lable'>NAME OF REFFERING HEALTH FACILITY:</div>
-                        <input type="text" value="8o32472457528" className='input full-width bordered padding' name="referring_facility" placeholder='NAME OF REFFERING HEALTH FACILITY' />
-                    </div>
+          
                     <div className="padding">
                         <div className='text-left input-lable'>NAME OF HEALTH FACILITY REFFERED TO:</div>
                         <select name="referred_to" id="" className='input bordered padding full-width'>
