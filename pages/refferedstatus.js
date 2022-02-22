@@ -249,7 +249,7 @@ useEffect(async() => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Dialog
+      {/* <Dialog
         open={EditModal}
         // onClose={handledropclose}
         aria-labelledby="alert-dialog-title"
@@ -321,7 +321,6 @@ useEffect(async() => {
                     <div className="padding">
                         <div className='text-left input-lable'>SEX:</div>
                             <select name="sex" id="" className='input full-width bordered padding'>
-                            {/* <option value="sex">Sex</option> */}
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                             </select>
@@ -415,10 +414,7 @@ useEffect(async() => {
 
         </div>
         <div className="border padding section">
-          {/* <div className='text-left input-lable'>TYPE OF DIAGNOSIS:</div>
-         <select name="diagnosis" id="" className='input full-width bordered padding'>
-          <option value="First diagnosis">Disgnosis One</option>
-         </select> */}
+
          <div className="padding">
               <div className='text-left input-lable'>DIAGNOSIS:</div>
               <TextField variant="outlined" fullWidth multiline defaultValue={currentpatient.diagnosis} name="diagnosis" id="" cols="30" rows="5" className='input bordered full-width padding' placeholder='DIAGNOSIS' />
@@ -453,7 +449,46 @@ useEffect(async() => {
             Update
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
+      <Dialog
+      open={EditModal}
+      // onClose={handledropclose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        Enter Feedback
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+            {
+                defaultValue === true && 
+            <section>
+                <form ref={patientEdit}>
+                    <div className="padding">
+                    <select name="outcome" id="" className="input padding bordered full-width">
+                        <option value="">Outcome</option>
+                        <option value="option one">Option One</option>
+                        <option value="option one">Option Two</option>
+                        <option value="option one">Option Three</option>
+                    </select>
+                    </div>
+                    <div className="padding">
+                    <TextField variant="outlined" multiline rows={3} label="Details" type="text" className='input full-width bordered padding' name="details"/>
+                    </div>
+                 </form>
+            </section>
+            }
+
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={()=>setEditModal(false)}  variant="outlined" color="error">Cancel</Button>
+        <Button onClick={UpdateFacility} autoFocus variant="contained" color="primary">
+          Update
+        </Button>
+      </DialogActions>
+    </Dialog>
             <Online />
     <section className="padding-20">
     <div className="h2">View Patient Referrals (In)</div>
@@ -470,18 +505,6 @@ useEffect(async() => {
         <th>CONTACT</th>
         <th>STATUS</th>
         <th className="text-center">ACTION</th>
-        {/* <th>OPD/FLD</th>
-        <th>SEX</th>
-        <th>AGE</th>
-        <th>ADDRESS</th>
-        <th>NHIS STATUS</th>
-        <th>REFERRED FROM/TO</th>
-        <th>REFERRAL TYPE</th>
-        <th>PROVISIONAL DIAGNOSIS</th>
-        <th>FINAL DIAGNOSIS</th>
-        <th>OUTCOME</th>
-        <th>ACTION</th>
-        <th>FEEDBACK</th> */}
     </thead>
     {
         patientdata.filter(data=>{
@@ -533,8 +556,8 @@ MenuListProps={{
 }}
 >
 {/* <MenuItem onClick={}>Edit</MenuItem> */}
-<MenuItem onClick={()=>HandleEdit(patient)}>Edit</MenuItem>
-<MenuItem onClick={()=>HandleDelete(patient)}>Delete</MenuItem>
+<MenuItem onClick={()=>HandleEdit(patient)}>Add Feedback</MenuItem>
+{/* <MenuItem onClick={()=>HandleDelete(patient)}>Delete</MenuItem> */}
 </Menu>
 </td>
             </tr>

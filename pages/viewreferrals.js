@@ -247,6 +247,7 @@ useEffect(async() => {
           </Button>
         </DialogActions>
       </Dialog>
+ 
       <Dialog
         open={EditModal}
         // onClose={handledropclose}
@@ -319,7 +320,7 @@ useEffect(async() => {
                     <div className="padding">
                         <div className='text-left input-lable'>SEX:</div>
                             <select name="sex" id="" className='input full-width bordered padding'>
-                            {/* <option value="sex">Sex</option> */}
+                   
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                             </select>
@@ -413,10 +414,7 @@ useEffect(async() => {
 
         </div>
         <div className="border padding section">
-          {/* <div className='text-left input-lable'>TYPE OF DIAGNOSIS:</div>
-         <select name="diagnosis" id="" className='input full-width bordered padding'>
-          <option value="First diagnosis">Disgnosis One</option>
-         </select> */}
+    
          <div className="padding">
               <div className='text-left input-lable'>DIAGNOSIS:</div>
               <TextField variant="outlined" fullWidth multiline defaultValue={currentpatient.diagnosis} name="diagnosis" id="" cols="30" rows="5" className='input bordered full-width padding' placeholder='DIAGNOSIS' />

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useState, useEffect } from "react";
+import { useState, useEffect ,useRef} from "react";
 import Axios from "axios"
 import * as React from 'react';
 import Button from '@mui/material/Button';
@@ -7,8 +7,9 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Online from "../components/Online";
+import { TextField } from '@mui/material';
 const RefferalRequest = () => {
-    
+    const form = useRef(null)
 const endPoint = "https://e-referral-api.herokuapp.com"
     const [modal1, setmodal1] = useState('none')
     const [modal2, setmodal2] = useState('none')
@@ -19,10 +20,31 @@ const endPoint = "https://e-referral-api.herokuapp.com"
     const [focus, setfocus] = useState("")
     const [snackbar, setsnackbar] = useState(false)
     const [message, setmessage] = useState("")
+    const [currentpatient, setcurrentpatient] = useState("")
+    const [Allfacilities, setAllfacilities] = useState([])
+    const [referringfacility, setreferringfacility] = useState("")
+    const [patientfacility, setpatientfacility] = useState("")
     useEffect(() => {
     const user = JSON.parse(localStorage.getItem("data"))
     setcurrentfacility(user.facility)
     })
+
+    // all facilities
+    useEffect(() => {
+        Axios.get( endPoint + "/facility/allfacilities",
+        {
+            headers: {
+                authorization: `Bearer ${token}`,
+                
+            }
+            }   
+        ).then((data)=>{
+            setAllfacilities(data.data.facilities)
+        })
+        .catch(error=>console.log(error))
+    })
+    
+    // all pateints
     useEffect(async() => {
     await Axios.get( endPoint + "/patient/allpatients",
     {
@@ -44,7 +66,20 @@ useEffect(() => {
     }, [])
 
 
-
+    useEffect(() => {
+        if(patientfacility != ""){
+        Axios.get( endPoint + "/facility/find/" + patientfacility,
+        {
+            headers: {
+                authorization: `Bearer ${token}`,
+                
+            }
+            }  
+         
+        ).then((data)=>setreferringfacility(data.data.facility))
+        .catch(error=>console.log(error))
+        }
+    })
 
     const openmodal1 = (id)=>{
         setmodal1('block')
@@ -55,9 +90,11 @@ useEffect(() => {
           setmodal1('none')
          
        }
-       const openmodal2 = ()=>{
+       const openmodal2 = (forwarddata)=>{
            setmodal2('block')
            setmodal1('none')
+           setcurrentpatient(forwarddata)
+           setpatientfacility(forwarddata.forwarding)
        }
        const closemodal2 = ()=>{
            setmodal2('none')
@@ -65,6 +102,7 @@ useEffect(() => {
 
        const [modaldisplay, setmodaldisplay] = useState('none')
        const viewmodal = ()=>{
+          
         setmodaldisplay('block')
        }
        const Closeviewmodal = ()=>{
@@ -76,13 +114,13 @@ useEffect(() => {
         setmessage("updating")
         setmodal1("none")
         setsnackbar(true)
- 
         if(focus != ""){
         Axios.patch(endPoint + "/patient/accept/:" + focus , {accepted:true} ,
         {
-            headers:{
-                authorization:`Bearer ${token}`
-            }
+           headers: {
+              authorization: `Bearer ${token}`,
+            
+           }
         }
         ).then(()=>{
             setmessage("patient accepted")
@@ -94,6 +132,45 @@ useEffect(() => {
         })
     
     }
+}
+
+const Forward = (e)=>{
+    e.preventDefault()
+    setmessage("Forwarding patient")
+    setsnackbar(true)
+    const current = form.current
+    const forwarded = current["forwardered"].value
+    const time = current["time"].value
+    const reason = current["reason"].value
+ 
+    const data = {
+        facility_referred_to_id:forwarded,
+        facility_referred_from_id: currentfacility,
+        insurance:"dhdh",
+        presenting_complaints:"jsjs",
+        exam_findings:"skk",
+        firstname:"ksks",
+        lastname:"shsjhs",
+        sex:"Male",
+        // time_of_departure:time,
+        reason:reason
+    }
+
+    Axios.patch(`${endPoint}/patient/forwardreferral/${currentpatient.id}`, data ,
+    {
+       headers: {
+          authorization: `Bearer ${token}`,
+        
+       }
+    }
+    ).then(()=>{
+        setmessage("patient forwarded")
+        setsnackbar(true)
+    }).catch(err=>{
+        console.log(err)
+        setmessage(err.message)
+        setsnackbar(true)
+    })
 }
     const title = 'Refferal Request'
     const action = (
@@ -120,7 +197,7 @@ useEffect(() => {
      <div className="container border padding-20 margin-top-50">  
      <div className="row">
          <div className="col sm-12 md-6 lg-6 padding">
-            <div className="h2"> Refferal Request</div>
+            <div className="h2"> Accept And forward Referral</div>
          </div>
          <div className="col sm-12 md-6 lg-6  padding">
             <input type="text" className='input bordered padding full-width' onChange={(e)=>setsearch(e.target.value)} placeholder="Search" />
@@ -150,10 +227,10 @@ useEffect(() => {
         <td>
             <span onClick={()=>openmodal1(patient._id)} className='button'>Accept</span>
             <span> | </span>
-            <span onClick={openmodal2} className='button'>Forward</span>
+            <span onClick={()=>openmodal2({id:patient._id,forwarding:patient.facility_referred_from, forwardered:patient.facility_referred_to , reason:patient.reason_for_referral})} className='button'>Forward</span>
         </td>
         <td>
-            <button className='button' onClick={viewmodal}>Preview</button>
+            <button className='button' onClick={()=>viewmodal}>Preview</button>
         </td>
         <td>
             {
@@ -195,7 +272,10 @@ useEffect(() => {
     </div>
     </div>
 </div>
-     <div className="popup back-shadow white" style={{display:`${modal2}`}}>
+{
+    currentpatient != "" &&
+    <form ref={form}>
+             <div className="popup back-shadow white" style={{display:`${modal2}`}}>
          <div className="padding-20 hr">
          <span className='float-right margin text-x-large pointer text-pink hover-text-red scale-up' onClick={closemodal2}>
      <span className="material-icons">
@@ -206,29 +286,45 @@ useEffect(() => {
  
          </div>
          <div className="padding">
+         <div className='text-left input-lable padding'>NAME OF FACILITY REFERRING FACILITY:</div>
          <div className="padding">
-         <div className='text-left input-lable'>NAME OF FORWARDING FACILITY:</div>
-         <input type="text" className='input bordered padding full-width' placeholder='NAME OF FORWARDING FACILITY' />
+{
+    referringfacility != "" &&
+    <TextField type="text"  disabled variant='outlined' fullWidth defaultValue={referringfacility.name}/>
+         
+}
      </div>
 
      <div className="padding">
          <div className='text-left input-lable'>NAME OF FACILITY FORWARDED TO:</div>
-         <input type="text" className='input bordered padding full-width' placeholder='NAME OF FACILITY FORWARDED TO' />
+         <select name="forwardered" id="" className='input bordered padding full-width'>
+                <option value="">Select Facility</option>
+                {
+                    Allfacilities != [] &&
+                    Allfacilities
+                    .map(facility=>(
+                     <option value={facility._id} key={facility._id}>{facility.name}</option>
+                    ))
+                     
+                }
+               
+   
+                </select>
      </div>
 
      <div className="padding">
          <div className='text-left input-lable'>TIME OF FORWARD:</div>
-         <input type="datetime-local" className='input bordered padding full-width' placeholder='NAME OF FACILITY FORWARDED TO' />
+         <TextField type="time" name="time" variant='outlined' fullWidth/>
      </div>
 
      <div className="padding">
          <div className='text-left input-lable'>REASON:</div>
-         <textarea rows='5' type="text" className='input bordered padding full-width' placeholder='REASON FOR FORWARD' />
+         <TextField multiline rows={3} type="text" name="reason" variant='outlined' fullWidth defaultValue={currentpatient.reason} label />
      </div>
 
     <div className="row">
         <div className="col sm-6 md-6 lg-6 padding">
-            <button className='button indigo text-white full-width'>Forward</button>
+            <button className='button indigo text-white full-width' onClick={Forward}>Forward</button>
         </div>
         <div className="col sm-6 md-6 lg-6 padding">
             <button className='button pink text-white full-width' onClick={closemodal2}>Cancel</button>
@@ -236,6 +332,8 @@ useEffect(() => {
     </div>
          </div>
     </div>
+    </form>
+}
 
         </section>
 
